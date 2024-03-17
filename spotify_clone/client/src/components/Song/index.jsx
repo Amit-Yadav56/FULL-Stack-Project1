@@ -1,39 +1,38 @@
-import { Fragment } from "react";
-import { ClickAwayListener } from "@mui/material";
-import ArrowRightIcon from "@mui/icons-material/ArrowRight";
+import { useState } from "react";
+import Like from "../Like";
+import { IconButton } from "@mui/material";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import styles from "./styles.module.scss";
+import PlaylistMenu from "../PlaylistMenu";
 
-const playlists = [
-	{ _id: 1, img: "", name: "Today's Top Songs", desc: "By Jahangeer" },
-];
+const Song = ({ song, playlist }) => {
+	const [menu, setMenu] = useState(false);
 
-const PlaylistMenu = ({ closeMenu }) => {
 	return (
-		<ClickAwayListener onClickAway={closeMenu}>
-			<div className={styles.menu} onClick={closeMenu}>
-				<div className={styles.playlist_option}>
-					<p>Add to Playlist</p>
-					<Fragment>
-						<ArrowRightIcon />
-						<div className={styles.playlists}>
-							{playlists.map((playlist) => (
-								<div className={styles.option} key={playlist._id}>
-									<p>{playlist.name}</p>
-								</div>
-							))}
-						</div>
-					</Fragment>
-				</div>
-
-				<div className={styles.option}>
-					<p>Go to artist</p>
-				</div>
-				<div className={styles.option}>
-					<p>Share</p>
-				</div>
+		<div className={styles.song_container}>
+			<div className={styles.left}>
+				<IconButton className={styles.play_btn}>
+					<PlayArrowIcon />
+				</IconButton>
+				<img src={song.img} alt="song_img" />
+				<p>{song.name}</p>
 			</div>
-		</ClickAwayListener>
+			<div className={styles.center}>
+				<p>{song.artist}</p>
+			</div>
+			<div className={styles.right}>
+				<Like songId={song._id} />
+				<p>4.30</p>
+				<IconButton className={styles.menu_btn} onClick={() => setMenu(true)}>
+					<MoreHorizIcon />
+				</IconButton>
+				{menu && (
+					<PlaylistMenu playlist={playlist} closeMenu={() => setMenu(false)} />
+				)}
+			</div>
+		</div>
 	);
 };
 
-export default PlaylistMenu;
+export default Song;

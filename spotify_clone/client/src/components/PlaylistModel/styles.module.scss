@@ -1,43 +1,34 @@
-.menu,
-.playlists {
-	z-index: 100;
-	width: 15rem;
-	border-radius: 0.5rem;
-	padding: 0.5rem;
-	background-color: var(--black);
-	box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-	position: absolute;
-	top: 0%;
-	right: 0;
+.model_container {
+	width: 40rem;
+	min-height: 40rem;
+	background-color: var(--light-black);
+	border-radius: 1rem;
+	position: fixed;
+	top: calc(50% - 20rem);
+	left: calc(50% - 20rem);
+	z-index: 200;
 
-	.option,
-	.playlist_option {
-		font-size: 1.4rem;
-		padding: 0.5rem;
-		border-radius: 0.5rem;
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		cursor: pointer;
+	.close_btn {
+		position: absolute;
+		right: 0%;
+		top: 0%;
 
 		svg {
 			width: 2rem;
 			height: 2rem;
-		}
-
-		&:hover {
-			background-color: var(--light-black);
+			color: var(--white);
 		}
 	}
 
-	.playlist_option:hover .playlists {
-		display: block;
-	}
-
-	.playlists {
-		top: 0;
-		bottom: initial;
-		right: 95%;
-		display: none;
+	.form_container {
+		h1 {
+			font-size: 1.8rem;
+			font-weight: 500;
+			margin: 2rem;
+			margin-bottom: 0;
+		}
+		.input_container {
+			padding: 0.5rem 1rem;
+		}
 	}
 }

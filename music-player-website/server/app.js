@@ -6,9 +6,15 @@ const app = express();
 const cors = require('cors');
 
 app.use(cors());
+
 app.get('/', (req, res) => {
     return res.json("Hey there");
 })
+
+//user authentication route
+const userRoute = require('./routes/auth.js')
+//if anything comes to this route navigate to // userroute
+app.use("/api/users/", userRoute);
 
 
 mongoose.connect(process.env.DB_STRING, { useNewUrlParser: true })

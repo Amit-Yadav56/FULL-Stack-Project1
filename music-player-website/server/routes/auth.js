@@ -26,7 +26,7 @@ router.get("/login", async (req, res) => {
                 newUserData(decodeValue, req, res)
 
             } else {
-                return res.send("Need to Update")
+                updateNewUserData(decodeValue, req, res);
             }
 
         }
@@ -54,6 +54,26 @@ const newUserData = async (decodeValue, req, res) => {
         res.status(200).send({ user: savedUser })
     } catch (error) {
         res.status(400).send({ sucess: false, msg: error })
+    }
+}
+
+//update the data already present in database
+const updateNewUserData = async (decodeValue, req, res) => {
+    const filter = { user_id: decodeValue.user_id };
+    const options = {
+        upsert: true,
+        new: true
+    };
+    try {
+        const result = await user.findOneAndUpdate(
+            filter,
+            { auth_time: decodeValue.auth_time },
+            options
+        );
+        //here user is tempravary variable
+        res.status(200).send({ user: result })
+    } catch (error) {
+        return res.status(505).json({ message: error })
     }
 }
 module.exports = router;

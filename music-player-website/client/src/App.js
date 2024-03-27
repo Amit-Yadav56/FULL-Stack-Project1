@@ -4,8 +4,8 @@ import { Home, Login } from './components'
 import { app } from "./config/firebase.config";
 import { getAuth } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
-
-
+//maintain all the motion animations
+import { AnimatePresence } from 'framer-motion'
 const App = () => {
   const firebaseAuth = getAuth(app);
   const navigate = useNavigate();
@@ -21,6 +21,7 @@ const App = () => {
       //if cred is found then redirect to homepage and print token
       if (userCred) {
         userCred.getIdToken().then((token) => {
+          console.log(userCred)
           console.log(token)
           navigate("/")
         })
@@ -35,15 +36,19 @@ const App = () => {
   }, [])
 
   return (
-    <div className='w-screen h-screen bg-primary flex justify-center items-center'>
-      <Routes>
-        {/* Home and login */}
-        <Route path='/login' element={<Login setAuth={setAuth} />} />
-        <Route path='/*' element={<Home />} />
 
-      </Routes>
-    </div>
-  )
-}
+    //The mode='wait' prop tells Framer Motion to complete any exit animations (exiting page) before starting a new animation 
+    <AnimatePresence mode='wait'>
+      <div className='min-w-[680px] h-auto bg-primary flex justify-center items-center'>
+        <Routes>
+          {/* Home and login */}
+          <Route path='/login' element={<Login setAuth={setAuth} />} />
+          <Route path='/*' element={<Home />} />
+
+        </Routes>
+      </div>
+    </AnimatePresence>
+  );
+};
 
 export default App

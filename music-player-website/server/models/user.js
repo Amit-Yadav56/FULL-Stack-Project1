@@ -1,5 +1,5 @@
 const { default: mongoose } = require("mongoose");
-
+//make structure of the database
 const userSchema = mongoose.Schema({
     name: {
         type: String,

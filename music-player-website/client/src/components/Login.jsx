@@ -1,7 +1,13 @@
 import React, { useEffect } from 'react'
+
+//to get react icons
 import { FcGoogle } from 'react-icons/fc'
+
+//importing forebase app and authentication
 import { app } from "../config/firebase.config";
 import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
+
+//Navigate to pages that we want
 import { useNavigate } from 'react-router-dom';
 
 
@@ -13,6 +19,7 @@ function login({ setAuth }) {
     const navigate = new useNavigate();
 
     const loginWithGoogle = async () => {
+        //pop up will occur to sign in to google
         await signInWithPopup(firebaseAuth, provider).then((userCred) => {
 
             if (userCred) {

@@ -2,6 +2,7 @@ const router = require("express").Router();
 //importing admin prevalages
 const admin = require("../config/firebase.config");
 
+//importing database models
 const user = require("../models/user")
 
 
@@ -17,6 +18,7 @@ router.get("/login", async (req, res) => {
         const decodeValue = await admin.auth().verifyIdToken(token);
         if (!decodeValue) {
             return res.status(505).json({ message: "UN authorized" })
+
         } else {
             //checking user exists or not in the database
             const userExists = await user.findOne({ "user_id": decodeValue.user_id })

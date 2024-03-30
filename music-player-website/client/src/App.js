@@ -6,6 +6,7 @@ import { getAuth } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 //maintain all the motion animations
 import { AnimatePresence } from 'framer-motion'
+import { validateUser } from './api';
 const App = () => {
   const firebaseAuth = getAuth(app);
   const navigate = useNavigate();
@@ -21,8 +22,10 @@ const App = () => {
       //if cred is found then redirect to homepage and print token
       if (userCred) {
         userCred.getIdToken().then((token) => {
-          console.log(userCred)
-          console.log(token)
+          validateUser(token).then((data) => {
+            console.log(data)
+          })
+
           navigate("/")
         })
       }

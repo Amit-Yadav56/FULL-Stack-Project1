@@ -5,7 +5,7 @@ const app = express();
 // cross origin resource sharing
 const cors = require('cors');
 
-app.use(cors());
+app.use(cors({ origin: true }));
 
 app.get('/', (req, res) => {
     return res.json("Hey there");

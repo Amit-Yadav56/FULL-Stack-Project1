@@ -10,4 +10,7 @@ export const StateProvider = ({ reducer, initialState, children }) => (
     </StateContext.Provider>
 )
 
-
+//This is the custom state
+export const useStateValue = () => {
+    useContext(StateContext)
+}

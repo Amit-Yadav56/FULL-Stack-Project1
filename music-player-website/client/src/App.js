@@ -4,12 +4,19 @@ import { Home, Login } from './components'
 import { app } from "./config/firebase.config";
 import { getAuth } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
+import { useStateValue } from './context/StateProvider';
 //maintain all the motion animations
 import { AnimatePresence } from 'framer-motion'
 import { validateUser } from './api';
+import { actionType } from './context/reducer';
+
+
 const App = () => {
   const firebaseAuth = getAuth(app);
   const navigate = useNavigate();
+  //someting wrong here
+  const [{ user }, dispatch] = useStateValue();
+
 
   //create a state to save the authentication is true or not
   const [auth, setAuth] = useState(false || window.localStorage.getItem("auth") === "true")
@@ -23,7 +30,10 @@ const App = () => {
       if (userCred) {
         userCred.getIdToken().then((token) => {
           validateUser(token).then((data) => {
-            console.log(data)
+            dispatch({
+              type: actionType.SET_USER,
+              user: data,
+            })
           })
 
           navigate("/")

@@ -15,7 +15,7 @@ const App = () => {
   const firebaseAuth = getAuth(app);
   const navigate = useNavigate();
   //someting wrong here
-  const [{ user }, dispatch] = useStateValue();
+  const [user, dispatch] = useStateValue();
 
 
   //create a state to save the authentication is true or not

@@ -11,6 +11,4 @@ export const StateProvider = ({ reducer, initialState, children }) => (
 )
 
 //This is the custom state
-export const useStateValue = () => {
-    useContext(StateContext)
-}
+export const useStateValue = () => useContext(StateContext)

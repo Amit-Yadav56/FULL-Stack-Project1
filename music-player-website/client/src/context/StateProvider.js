@@ -11,4 +11,7 @@ export const StateProvider = ({ reducer, initialState, children }) => (
 )
 
 //This is the custom state
-export const useStateValue = () => useContext(StateContext)
+export const UseStateValue = () => useContext(StateContext)
+
+
+//from context provider we can use the value whenever we want

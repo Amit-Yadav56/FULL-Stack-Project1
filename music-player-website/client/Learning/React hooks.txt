@@ -1,0 +1,18 @@
+React hooks:
+
+
+useState : set the state and update the state also set initial value of state
+eg: [text,settext] ,text is the variable and settext is function to update variable in the future
+
+
+useEffext: perform side effect.if our component is updated and we need to perform some operation then we use it
+eg: we have a state variable text and when it changes then i want to perform a side effect which can be performed using it.
+for ex when text changes then i want to give a alert message
+
+useContext: React Context is a way to manage state globally.It can be used together with the useState Hook to share state between deeply nested components more easily than with useState alone.
+eg:we need to give user detail from app.js so rether than passing the value through each component we can pass directly to deepest compeonent in program
+
+
+reducer: used to change the state of program. we can have multiple reducers
+
+

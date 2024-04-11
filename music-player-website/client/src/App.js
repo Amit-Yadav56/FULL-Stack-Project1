@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Route, Routes } from 'react-router-dom'
-import { Home, Login } from './components'
+import { Dashboard, Home, Login } from './components'
 import { app } from "./config/firebase.config";
 import { getAuth } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
@@ -10,6 +10,7 @@ import { AnimatePresence } from 'framer-motion'
 import { validateUser } from './api';
 import { actionType } from './context/reducer';
 import { FcDisplay } from 'react-icons/fc';
+
 
 
 const App = () => {
@@ -67,6 +68,8 @@ const App = () => {
           {/* Home and login */}
           <Route path='/login' element={<Login setAuth={setAuth} />} />
           <Route path='/*' element={<Home />} />
+          <Route path='/dashboard/*' element={<Dashboard />} />
+
 
         </Routes>
       </div>

@@ -13,7 +13,7 @@ const reducer = (state, action) => {
         //In the case where action.type is 'SET_USER', it returns a new state object with the user property updated to the value of action.user.
         case actionType.SET_USER:
             return {
-                ...state,
+                ...state,//create shallow copy of state
                 user: action.user,
 
             }

@@ -16,6 +16,17 @@ const userRoute = require('./routes/auth.js')
 //if anything comes to this route navigate to // userroute
 app.use("/api/users/", userRoute);
 
+//Artist Routes
+const artistRoute = require('./routes/artist.js')
+app.use("/api/artist/", artistRoute);
+
+//Album Routes
+const albumRoute = require('./routes/albums.js')
+app.use("/api/albums/", albumRoute);
+
+//Songs Routes
+const songRoute = require('./routes/songs.js')
+app.use("/api/songs/", songRoute);
 
 mongoose.connect(process.env.DB_STRING, { useNewUrlParser: true })
 mongoose.connection.once("open", () => {

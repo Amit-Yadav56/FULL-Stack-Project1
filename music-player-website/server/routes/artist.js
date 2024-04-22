@@ -25,4 +25,18 @@ router.post("/saveNew/", async (req, res) => {
   }
 });
 
+//write a get request to get single artist information
+//: is used to give parameter like id to route
+router.get("/getOne/:id/", async (req, res) => {
+
+  const filter = { _id: req.params.id }
+
+  const data = await artist.findOne(filter)
+  if (data) {
+    return res.status(200).send({ sucess: true, artist: data })
+  } else {
+    return res.status(400).send({ sucess: false, msg: "Artist not found" })
+  }
+})
+
 module.exports = router

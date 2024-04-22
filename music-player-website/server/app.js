@@ -6,6 +6,8 @@ const app = express();
 const cors = require('cors');
 
 app.use(cors({ origin: true }));
+app.use(express.json())
+
 
 app.get('/', (req, res) => {
     return res.json("Hey there");
@@ -18,10 +20,10 @@ app.use("/api/users/", userRoute);
 
 //Artist Routes
 const artistRoute = require('./routes/artist.js')
-app.use("/api/artist/", artistRoute);
+app.use("/api/artists/", artistRoute);
 
 //Album Routes
-const albumRoute = require('./routes/albums.js')
+const albumRoute = require('./routes/album.js')
 app.use("/api/albums/", albumRoute);
 
 //Songs Routes

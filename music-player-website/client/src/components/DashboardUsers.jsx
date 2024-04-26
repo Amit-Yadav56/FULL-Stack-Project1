@@ -1,8 +1,13 @@
 import React from 'react'
 import { UseStateValue } from '../context/StateProvider'
 import { motion } from 'framer-motion'
+//used to format createdAt time as in format of eg(created 12days ago) 
+import moment from "moment";
+
 export const DashboardUserCard = ({ data }, { index }) => {
-  console.log(data)
+
+  const createdTime = moment(new Date(data.createdAt)).format("MMMM Do YYYY")
+
   return (
     <motion.div
       className='relative w-full rounded-md flex items-center justify-between py-4 bg-lightOverlay cursor-pointer hover:bg-card hover:shadow-md'
@@ -31,7 +36,7 @@ export const DashboardUserCard = ({ data }, { index }) => {
 
       {/* User Created */}
       <div className='w-275 min-w-[160px] flex justify-center items-center'>
-        <p>{data.createdAt}</p>
+        <p>{createdTime}</p>
       </div>
 
       {/* User Role */}

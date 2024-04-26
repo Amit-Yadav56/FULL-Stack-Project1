@@ -1,5 +1,49 @@
 import React from 'react'
 import { UseStateValue } from '../context/StateProvider'
+import { motion } from 'framer-motion'
+export const DashboardUserCard = ({ data }, { index }) => {
+  console.log(data)
+  return (
+    <motion.div
+      className='relative w-full rounded-md flex items-center justify-between py-4 bg-lightOverlay cursor-pointer hover:bg-card hover:shadow-md'
+    >
+      {/* User Image */}
+      <div className='w-275 min-w-[160px] flex justify-center items-center'>
+        <img src={data.imageUrl} referrerPolicy='no-referrer' alt="" className='w-10 h-10 object-cover rounded-md min-w-[40px] shadow-md' />
+      </div>
+
+
+      {/* User Name */}
+      <div className='w-275 min-w-[160px] flex justify-center items-center'>
+        <p>{data.name}</p>
+      </div>
+
+      {/* User Email */}
+      <div className='w-275 min-w-[160px] flex justify-center items-center'>
+        <p>{data.email}</p>
+      </div>
+
+
+      {/* User verified */}
+      <div className='w-275 min-w-[160px] flex justify-center items-center'>
+        <p>{data.email_verified ? "True" : "False"}</p>
+      </div>
+
+      {/* User Created */}
+      <div className='w-275 min-w-[160px] flex justify-center items-center'>
+        <p>{data.createdAt}</p>
+      </div>
+
+      {/* User Role */}
+      <div className='w-275 min-w-[160px] flex justify-center items-center'>
+        <p>{data.role}</p>
+      </div>
+
+
+    </motion.div>
+  )
+}
+
 
 
 const DashboardUsers = () => {
@@ -29,6 +73,14 @@ const DashboardUsers = () => {
         </div>
 
         {/* Table Body Content  */}
+        {
+          allUsers && (
+            // we are not using a function but rendering a component so we use () breacket instead of {}
+            allUsers?.map((data, i) => (
+              <DashboardUserCard data={data} index={i} />
+            ))
+          )
+        }
       </div>
     </div>
   )

@@ -76,4 +76,14 @@ const updateNewUserData = async (decodeValue, req, res) => {
         return res.status(505).json({ message: error })
     }
 }
+//get all the user info
+router.get('/getAllUsers', async (req, res) => {
+
+    const data = await user.find().sort({ createdAt: 1 })
+    if (data) {
+        return res.status(200).send({ sucess: true, data: data })
+    } else {
+        return res.status(400).send({ sucess: false, msg: "song not found" })
+    }
+})
 module.exports = router;

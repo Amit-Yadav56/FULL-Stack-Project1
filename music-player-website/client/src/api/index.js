@@ -1,3 +1,9 @@
+
+
+//for fetching all the necessary information from the server
+
+
+
 //axios links the frontend and the backend
 import axios from 'axios'
 //base url of the express sever
@@ -18,3 +24,37 @@ export const validateUser = async (token) => {
         console.log(error);
     }
 }
+
+export const getAllUsers = async () => {
+    try {
+        const res = await axios.get(`${baseUrl}api/users/getAllUsers`)
+        return res.data
+    } catch (error) {
+        return null
+    }
+}
+export const getAllSongs = async () => {
+    try {
+        const res = await axios.get(`${baseUrl}api/songs/getAll`)
+        return res.data
+    } catch (error) {
+        return null
+    }
+}
+export const getAllAlbums = async () => {
+    try {
+        const res = await axios.get(`${baseUrl}api/albums/getAll`)
+        return res.data
+    } catch (error) {
+        return null
+    }
+}
+export const getAllArtists = async () => {
+    try {
+        const res = await axios.get(`${baseUrl}api/artists/getAll`)
+        return res.data
+    } catch (error) {
+        return null
+    }
+}
+

@@ -86,4 +86,35 @@ router.get('/getAllUsers', async (req, res) => {
         return res.status(400).send({ sucess: false, msg: "song not found" })
     }
 })
+
+//updating the role data 
+router.put("/updateRole/:userId", async (req, res) => {
+    const filter = { _id: req.params.userId };
+    const role = req.body.data.role;
+
+    const options = {
+        upsert: true,
+        new: true,
+    };
+
+    const data = await user.findOneAndUpdate(filter, { role: role }, options);
+    if (data) {
+        return res.status(200).send({ sucess: true, data: data })
+    } else {
+        return res.status(400).send({ sucess: false, msg: "song not found" })
+    }
+
+});
+router.delete('/deleteUser/:id', async (req, res) => {
+    const filter = { _id: req.params.id };
+    const data = await user.deleteOne(filter)
+    if (result.deleteCount === 1) {
+        res.status(200).send({ sucess: true, msg: "user removed" });
+    } else {
+        res.status(400).send({ success: false, msg: err });
+    }
+
+})
+
+
 module.exports = router;

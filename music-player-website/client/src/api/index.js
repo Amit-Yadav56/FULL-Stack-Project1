@@ -51,7 +51,28 @@ export const getAllAlbums = async () => {
 }
 export const getAllArtists = async () => {
     try {
-        const res = await axios.get(`${baseUrl}api/artists/getAll`)
+        const res = await axios.get(`${baseUrl}api/artists/getAll`,)
+        return res.data
+    } catch (error) {
+        return null
+    }
+}
+
+export const changingUserRole = async (userId, role) => {
+    try {
+        const res = axios.put(`${baseUrl}api/users/updateRole/${userId}`, {
+            data: { role: role },
+        });
+        return res;
+    } catch (error) {
+        return null;
+    }
+};
+
+
+export const deleteUser = async (user_id) => {
+    try {
+        const res = await axios.delete(`${baseUrl}api/users/deleteUser/${user_id}`,)
         return res.data
     } catch (error) {
         return null

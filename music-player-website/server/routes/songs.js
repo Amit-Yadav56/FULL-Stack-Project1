@@ -88,9 +88,9 @@ router.delete("/deleteSong/:id", async (req, res) => {
   const result = await song.deleteOne(filter)
 
   if (result) {
-    return res.status(200).send({ sucess: true, msg: "song deleted sucessfully", data: result })
+    return res.status(200).send({ sucess: true, msg: "Data Deleted", data: result })
   } else {
-    return res.status(400).send({ sucess: false, msg: "song not found" })
+    return res.status(400).send({ sucess: false, msg: "Data Not Found" })
   }
 })
 

@@ -6,8 +6,6 @@ import { UseStateValue } from '../context/StateProvider'
 import { actionType } from "../context/reducer";
 import { IoAdd, IoPause, IoPlay, IoTrash } from "react-icons/io5";
 import { NavLink } from "react-router-dom";
-import AlertSuccess from "./AlertSucess";
-import AlertError from "./AlertError";
 
 const DashboardSongs = () => {
   const [songFilter, setSongFilter] = useState("");
@@ -16,17 +14,8 @@ const DashboardSongs = () => {
 
   const [{ allSongs }, dispatch] = UseStateValue();
 
-  useEffect(() => {
-    if (!allSongs) {
-      getAllSongs().then((data) => {
-        dispatch({
-          type: actionType.SET_ALL_SONGS,
-          allSongs: data.data,
-        });
-      });
-    }
-  }, []);
 
+  //used to filter the songs by search
   useEffect(() => {
     if (songFilter.length > 0) {
       const filtered = allSongs.filter(
@@ -41,6 +30,19 @@ const DashboardSongs = () => {
     }
   }, [songFilter]);
 
+
+  //get all song in the context provider
+  useEffect(() => {
+    if (!allSongs) {
+      getAllSongs().then((data) => {
+        dispatch({
+          type: actionType.SET_ALL_SONGS,
+          allSongs: data.data,
+        });
+      });
+    }
+  }, []);
+
   return (
     <div className="w-full p-4 flex items-center justify-center flex-col">
       <div className="w-full flex justify-center items-center gap-24">
@@ -53,14 +55,17 @@ const DashboardSongs = () => {
         <input
           type="text"
           placeholder="Search here"
-          className={`w-52 px-4 py-2 border ${isFocus ? "border-gray-500 shadow-md" : "border-gray-300"
+          className={`w-52 px-4 py-2 border ${isFocus ? "border-black shadow-md" : "border-gray-300"
             } rounded-md bg-transparent outline-none duration-150 transition-all ease-in-out text-base text-textColor font-semibold`}
           value={songFilter}
           onChange={(e) => setSongFilter(e.target.value)}
+          // set the input box border change to black
           onBlur={() => setIsFocus(false)}
           onFocus={() => setIsFocus(true)}
         />
 
+
+        {/* to erase all the filtered songs */}
         {songFilter && (
           <motion.i
             initial={{ opacity: 0 }}
@@ -76,6 +81,8 @@ const DashboardSongs = () => {
         )}
       </div>
 
+
+      {/* section to display the filtered songs */}
       <div className="relative w-full  my-4 p-4 py-12 border border-gray-300 rounded-md">
         <div className="absolute top-4 left-4">
           <p className="text-xl font-bold">
@@ -127,33 +134,21 @@ export const SongCard = ({ data, index }) => {
 
   const deleteObject = (id) => {
     deleteSongById(id).then((res) => {
-      // console.log(res.data);
-      if (res.data.success) {
-        setAlert("success");
-        setAlertMsg(res.data.msg);
+      if (res) {
         getAllSongs().then((data) => {
           dispatch({
             type: actionType.SET_ALL_SONGS,
             allSongs: data.data,
           });
         });
-        setTimeout(() => {
-          setAlert(false);
-        }, 4000);
-      } else {
-        setAlert("error");
-        setAlertMsg(res.data.msg);
-        setTimeout(() => {
-          setAlert(false);
-        }, 4000);
       }
+
     });
   };
   return (
 
 
     <motion.div
-      whileTap={{ scale: 0.8 }}
       initial={{ opacity: 0, translateX: -50 }}
       animate={{ opacity: 1, translateX: 0 }}
       transition={{ duration: 0.3, delay: index * 0.1 }}
@@ -196,7 +191,7 @@ export const SongCard = ({ data, index }) => {
         <motion.img
           whileHover={{ scale: 1.05 }}
           src={data.imageUrl}
-          alt="nothing"
+          alt="no image"
           className=" w-full h-full rounded-lg object-cover"
         />
       </div>
@@ -206,21 +201,13 @@ export const SongCard = ({ data, index }) => {
         <span className="block text-sm text-gray-400 my-1">{data.artist}</span>
       </p>
 
-      <div className="w-full absolute bottom-2 right-2 flex items-center justify-between px-4">
-        <motion.i whileTap={{ scale: 0.75 }} onClick={() => setIsDeleted(true)}>
+      <div className="w-full absolute bottom-2 right-2 flex items-center justify-between px-4" onClick={() => setIsDeleted(true)}>
+        <motion.i whileTap={{ scale: 0.75 }} >
           <IoTrash className="text-base text-red-400 drop-shadow-md hover:text-red-600" />
         </motion.i>
       </div>
 
-      {alert && (
-        <>
-          {alert === "success" ? (
-            <AlertSuccess msg={alertMsg} />
-          ) : (
-            <AlertError msg={alertMsg} />
-          )}
-        </>
-      )}
+
 
     </motion.div>
   );

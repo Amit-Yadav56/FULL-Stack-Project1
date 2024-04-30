@@ -111,7 +111,7 @@ router.delete('/deleteUser/:id', async (req, res) => {
     if (result.deleteCount === 1) {
         res.status(200).send({ sucess: true, msg: "user removed" });
     } else {
-        res.status(400).send({ success: false, msg: err });
+        res.status(400).send({ success: false, msg: "user not removed sucessfully" });
     }
 
 })

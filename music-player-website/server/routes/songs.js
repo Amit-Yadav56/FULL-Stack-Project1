@@ -83,7 +83,7 @@ router.put("/update/:id", async (req, res) => {
 
 
 //deleting the song in delete route
-router.delete("/delete/:id", async (req, res) => {
+router.delete("/deleteSong/:id", async (req, res) => {
   const filter = { _id: req.params.id }
   const result = await song.deleteOne(filter)
 

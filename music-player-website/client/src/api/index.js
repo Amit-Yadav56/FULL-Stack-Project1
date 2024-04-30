@@ -72,10 +72,21 @@ export const changingUserRole = async (userId, role) => {
 
 export const deleteUser = async (user_id) => {
     try {
-        const res = await axios.delete(`${baseUrl}api/users/deleteUser/${user_id}`,)
+        const res = await axios.delete(`${baseUrl}api/users/deleteUser/${user_id}`)
         return res.data
     } catch (error) {
         return null
     }
 }
+
+
+export const deleteSongById = async (user_id) => {
+    try {
+        const res = await axios.delete(`${baseUrl}api/songs/deleteSong/${user_id}`)
+        return res.data
+    } catch (error) {
+        return null
+    }
+}
+
 

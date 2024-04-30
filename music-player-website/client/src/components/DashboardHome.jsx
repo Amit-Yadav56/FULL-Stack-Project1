@@ -13,12 +13,15 @@ export const DashboardCard = ({ icon, name, count, route }) => {
 
   const bg_color = bgColor[parseInt(Math.random() * bgColor.length)]
   return (
-    <motion.div whileTap={{ scale: 0.8 }} style={{ background: `${bg_color}` }} className='p-4 w-40 gap-4 h-auto rounded-lg shadow-md flex flex-col items-center '>
-      {icon}
-      <p className='text-xl text-textColor font-semibold '>{name}</p>
-      <p className='text-xl text-textColor font-semibold '>{count}
-      </p>
-    </motion.div>
+    <NavLink to={`http://localhost:3000/dashboard/${route}`}>
+      <motion.div whileTap={{ scale: 0.8 }} style={{ background: `${bg_color}` }} className='p-4 w-40 gap-4 h-auto rounded-lg shadow-md flex flex-col items-center '>
+        {icon}
+        <p className='text-xl text-textColor font-semibold '>{name}</p>
+        <p className='text-xl text-textColor font-semibold '>{count}
+        </p>
+      </motion.div>
+
+    </NavLink>
   )
 }
 

@@ -52,6 +52,7 @@ export const getAllAlbums = async () => {
 export const getAllArtists = async () => {
     try {
         const res = await axios.get(`${baseUrl}api/artists/getAll`,)
+        console.log(res);
         return res.data
     } catch (error) {
         return null
@@ -88,5 +89,8 @@ export const deleteSongById = async (user_id) => {
         return null
     }
 }
+
+
+
 
 

@@ -2,20 +2,20 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
-import { useStateValue } from "../context/StateProvider";
+import { UseStateValue } from "../context/StateProvider";
 import { Link } from "react-router-dom";
 import { IoLogoInstagram, IoLogoTwitter } from "react-icons/io5";
 import { MdDelete } from "react-icons/md";
-import { getAllArtist } from "../api";
+import { getAllArtists } from "../api";
 import { actionType } from "../context/reducer";
 
 const DashboardArtist = () => {
-  const [{ artists }, dispatch] = useStateValue();
+  const [{ artists }, dispatch] = UseStateValue();
 
   useEffect(() => {
     if (!artists) {
-      getAllArtist().then((data) => {
-        dispatch({ type: actionType.SET_ARTISTS, artists: data.data });
+      getAllArtists().then((data) => {
+        dispatch({ type: actionType.SET_ALL_ARTISTS, artists: data.data });
       });
     }
   }, []);
@@ -70,7 +70,29 @@ export const ArtistCard = ({ data, index }) => {
         <MdDelete className=" text-gray-400 hover:text-red-400 text-xl cursor-pointer" />
       </motion.i>
 
-
+      {isDelete && (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.5 }}
+          className="absolute inset-0 p-2 bg-darkOverlay  backdrop-blur-md flex flex-col items-center justify-center gap-4"
+        >
+          <p className="text-gray-100 text-base text-center">
+            Are you sure do you want to delete this?
+          </p>
+          <div className="flex items-center w-full justify-center gap-3">
+            <div className="bg-red-300 px-3 rounded-md">
+              <p className="text-headingColor text-sm">Yes</p>
+            </div>
+            <div
+              className="bg-green-300 px-3 rounded-md"
+              onClick={() => setIsDelete(false)}
+            >
+              <p className="text-headingColor text-sm">No</p>
+            </div>
+          </div>
+        </motion.div>
+      )}
     </motion.div>
   );
 };

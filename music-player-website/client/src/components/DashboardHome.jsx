@@ -57,7 +57,7 @@ const DashboardHome = () => {
       getAllArtists().then((data) => {
         dispatch({
           type: actionType.SET_ALL_ARTISTS,
-          allArtists: data.artists
+          allArtists: data.data
         })
       })
     }

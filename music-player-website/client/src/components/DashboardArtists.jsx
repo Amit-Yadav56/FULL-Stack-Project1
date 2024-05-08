@@ -6,16 +6,16 @@ import { UseStateValue } from "../context/StateProvider";
 import { Link } from "react-router-dom";
 import { IoLogoInstagram, IoLogoTwitter } from "react-icons/io5";
 import { MdDelete } from "react-icons/md";
-import { getAllArtists } from "../api";
+import { deleteArtistById, getAllArtists } from "../api";
 import { actionType } from "../context/reducer";
 
 const DashboardArtist = () => {
-  const [{ artists }, dispatch] = UseStateValue();
+  const [{ allArtists }, dispatch] = UseStateValue();
 
   useEffect(() => {
-    if (!artists) {
+    if (!allArtists) {
       getAllArtists().then((data) => {
-        dispatch({ type: actionType.SET_ALL_ARTISTS, artists: data.data });
+        dispatch({ type: actionType.SET_ALL_ARTISTS, allArtists: data.data });
       });
     }
   }, []);
@@ -23,8 +23,8 @@ const DashboardArtist = () => {
   return (
     <div className="w-full p-4 flex items-center justify-center flex-col">
       <div className="relative w-full gap-3  my-4 p-4 py-12 border border-gray-300 rounded-md flex flex-wrap justify-evenly">
-        {artists &&
-          artists.map((data, index) => (
+        {allArtists &&
+          allArtists.map((data, index) => (
             <>
               <ArtistCard key={index} data={data} index={index} />
             </>
@@ -36,6 +36,7 @@ const DashboardArtist = () => {
 
 export const ArtistCard = ({ data, index }) => {
   const [isDelete, setIsDelete] = useState(false);
+  const [{ allArtists }, dispatch] = UseStateValue();
   return (
     <motion.div
       initial={{ opacity: 0, translateX: -50 }}
@@ -44,7 +45,7 @@ export const ArtistCard = ({ data, index }) => {
       className="relative w-44 min-w-180 px-2 py-4 gap-3 cursor-pointer hover:shadow-xl hover:bg-card bg-gray-100 shadow-md rounded-lg flex flex-col items-center"
     >
       <img
-        src={data?.imageURL}
+        src={data?.imageUrl}
         className="w-full h-40 object-cover rounded-md"
         alt=""
       />
@@ -81,7 +82,24 @@ export const ArtistCard = ({ data, index }) => {
             Are you sure do you want to delete this?
           </p>
           <div className="flex items-center w-full justify-center gap-3">
-            <div className="bg-red-300 px-3 rounded-md">
+            <div
+              className="bg-red-300 px-3 rounded-md"
+              onClick={() => {
+                deleteArtistById(data._id).then((res) => {
+                  if (res) {
+                    getAllArtists().then((data) => {
+                      dispatch({
+                        type: actionType.SET_ALL_ARTISTS,
+                        allArtists: data.data,
+                      });
+                    });
+                  }
+
+                });
+                setIsDelete(false)
+              }
+              }
+            >
               <p className="text-headingColor text-sm">Yes</p>
             </div>
             <div

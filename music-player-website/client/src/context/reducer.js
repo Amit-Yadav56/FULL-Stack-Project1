@@ -36,7 +36,7 @@ const reducer = (state, action) => {
         case actionType.SET_ALL_ARTISTS:
             return {
                 ...state,//create shallow copy of state
-                allArtists: action.artists,
+                allArtists: action.allArtists,
 
             }
         case actionType.SET_ALL_SONGS:

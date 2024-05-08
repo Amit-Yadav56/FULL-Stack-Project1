@@ -80,9 +80,17 @@ export const deleteUser = async (user_id) => {
 }
 
 
-export const deleteSongById = async (user_id) => {
+export const deleteSongById = async (song_id) => {
     try {
-        const res = await axios.delete(`${baseUrl}api/songs/deleteSong/${user_id}`)
+        const res = await axios.delete(`${baseUrl}api/songs/deleteSong/${song_id}`)
+        return res.data
+    } catch (error) {
+        return null
+    }
+}
+export const deleteArtistById = async (artist_id) => {
+    try {
+        const res = await axios.delete(`${baseUrl}api/artists/delete/${artist_id}`)
         return res.data
     } catch (error) {
         return null

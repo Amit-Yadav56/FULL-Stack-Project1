@@ -9,5 +9,6 @@ export { default as DashboardSongs } from './DashboardSongs';
 export { default as DashboardUsers } from './DashboardUsers';
 export { default as DashboardAlbums } from './DashboardAlbums';
 export { default as DashboardArtists } from './DashboardArtists';
+export { default as DashboardNewSong } from './DashboardNewSong';
 
 

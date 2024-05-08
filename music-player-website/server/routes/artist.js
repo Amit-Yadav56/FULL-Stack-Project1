@@ -46,7 +46,7 @@ router.get('/getAll', async (req, res) => {
     sort: { createdAt: 1 }
   };
 
-  const cursor = await artist.find(options);
+  const cursor = await artist.find().sort({ createdAt: 1 });
   if (cursor) {
     res.status(200).send({ success: true, data: cursor });
   } else {

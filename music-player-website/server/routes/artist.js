@@ -42,11 +42,15 @@ router.get("/getOne/:id/", async (req, res) => {
 //get all the artist info
 router.get('/getAll', async (req, res) => {
 
-  const data = await artist.find().sort({ createdAt: 1 })
-  if (data) {
-    return res.status(200).send({ sucess: true, artists: data })
+  const options = {
+    sort: { createdAt: 1 }
+  };
+
+  const cursor = await artist.find(options);
+  if (cursor) {
+    res.status(200).send({ success: true, data: cursor });
   } else {
-    return res.status(400).send({ sucess: false, msg: "Artist not found" })
+    res.status(200).send({ success: true, msg: "No Data Found" });
   }
 })
 

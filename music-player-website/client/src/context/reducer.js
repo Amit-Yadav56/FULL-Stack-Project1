@@ -7,6 +7,7 @@ export const actionType = {
     SET_ALL_ARTISTS: 'SET_ALL_ARTISTS',
     SET_ALL_ALBUMS: 'SET_ALL_ALBUMS',
     SET_ALL_SONGS: 'SET_ALL_SONGS',
+    SET_SONG_PLAYING: 'SET_SONG_PLAYING',
 }
 
 const reducer = (state, action) => {
@@ -45,6 +46,13 @@ const reducer = (state, action) => {
                 allSongs: action.allSongs,
 
             }
+        case actionType.SET_SONG_PLAYING:
+            return {
+                ...state,//create shallow copy of state
+                isSongPlaying: action.isSongPlaying,
+
+            }
+
         default:
             return state;
     }

@@ -49,7 +49,7 @@ const DashboardHome = () => {
       getAllAlbums().then((data) => {
         dispatch({
           type: actionType.SET_ALL_ALBUMS,
-          allAlbums: data.albums
+          allAlbums: data.album
         })
       })
     }

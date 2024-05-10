@@ -40,7 +40,7 @@ router.get('/getAll', async (req, res) => {
 
   const data = await album.find().sort({ createdAt: 1 })
   if (data) {
-    return res.status(200).send({ sucess: true, albums: data })
+    return res.status(200).send({ sucess: true, album: data })
   } else {
     return res.status(400).send({ sucess: false, msg: "Album not found" })
   }

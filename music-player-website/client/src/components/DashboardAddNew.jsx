@@ -342,9 +342,9 @@ const DashboardNewSong = () => {
           </div>
         </div>
         <div className="flex flex-col items-center justify-center w-full p-4">
-          <p className="font-bold p-2 text-gray-600 m-1">Add New Artists</p>
+          <p className="font-bold p-2 text-gray-600 m-1">Add A New Artists</p>
           <AddNewArtist />
-          <p className="font-bold p-2 text-gray-600 m-1">Add New Album </p>
+          <p className="font-bold p-2 text-gray-600 m-1">Add A New Album </p>
           <AddNewAlbum />
         </div>
       </div>

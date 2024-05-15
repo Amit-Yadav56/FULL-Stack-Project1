@@ -247,6 +247,100 @@ const DashboardNewSong = () => {
   return (
     <div className="flex items-center justify-center p-4 border border-gray-300 rounded-md">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full">
+        <div className="flex flex-col items-center justify-center gap-4">
+          <p className="font-bold p-2 text-gray-600 m-1">Add New Song</p>
+          <input
+            type="text"
+            placeholder="Type your song name"
+            className="w-full p-3 rounded-md text-base font-semibold text-textColor outline-none shadow-sm border border-gray-300 bg-transparent"
+            value={songName}
+            onChange={(e) => setSongName(e.target.value)}
+          />
+
+
+
+          <div className="flex items-center justify-between gap-2 w-full flex-wrap">
+            <div className="bg-card  backdrop-blur-md w-full lg:w-300 h-300 rounded-md border-2 border-dotted border-gray-300 cursor-pointer">
+              {isImageLoading && <ImageLoader progress={uploadProgress} />}
+              {!isImageLoading && (
+                <>
+                  {!songImageUrl ? (
+                    <ImageUploader
+                      setImageURL={setSongImageUrl}
+                      setAlert={setSetAlert}
+                      alertMsg={setAlertMsg}
+                      isLoading={setIsImageLoading}
+                      setProgress={setUploadProgress}
+                      isImage={true}
+                    />
+                  ) : (
+                    <div className="relative w-full h-full overflow-hidden rounded-md">
+                      <img
+                        src={songImageUrl}
+                        alt="uploaded image"
+                        className="w-full h-full object-cover"
+                      />
+                      <button
+                        type="button"
+                        className="absolute bottom-3 right-3 p-3 rounded-full bg-red-500 text-xl cursor-pointer outline-none hover:shadow-md  duration-500 transition-all ease-in-out"
+                        onClick={() => {
+                          deleteImageObject(songImageUrl, "image");
+                        }}
+                      >
+                        <MdDelete className="text-white" />
+                      </button>
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
+
+            <div className="bg-card  backdrop-blur-md w-full lg:w-300 h-300 rounded-md border-2 border-dotted border-gray-300 cursor-pointer">
+              {isAudioLoading && <ImageLoader progress={uploadProgress} />}
+              {!isAudioLoading && (
+                <>
+                  {!audioAsset ? (
+                    <ImageUploader
+                      setImageURL={setAudioAsset}
+                      setAlert={setSetAlert}
+                      alertMsg={setAlertMsg}
+                      isLoading={setIsAudioLoading}
+                      setProgress={setUploadProgress}
+                      isImage={false}
+                    />
+                  ) : (
+                    <div className="relative w-full h-full flex items-center justify-center overflow-hidden rounded-md">
+                      <audio ref={audioRef} src={audioAsset} controls />
+                      <button
+                        type="button"
+                        className="absolute bottom-3 right-3 p-3 rounded-full bg-red-500 text-xl cursor-pointer outline-none hover:shadow-md  duration-500 transition-all ease-in-out"
+                        onClick={() => {
+                          deleteImageObject(audioAsset, "audio");
+                        }}
+                      >
+                        <MdDelete className="text-white" />
+                      </button>
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
+
+            <div className="flex items-center justify-end w-full p-4">
+              {isImageLoading || isAudioLoading ? (
+                <DisabledButton />
+              ) : (
+                <motion.button
+                  whileTap={{ scale: 0.75 }}
+                  className="px-8 py-2 rounded-md text-white bg-red-600 hover:shadow-lg"
+                  onClick={saveSong}
+                >
+                  Send
+                </motion.button>
+              )}
+            </div>
+          </div>
+        </div>
 
       </div>
 

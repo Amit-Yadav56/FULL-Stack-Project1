@@ -7,11 +7,14 @@ import {
   uploadBytesResumable,
   deleteObject,
 } from "firebase/storage";
+import { motion } from "framer-motion";
 
 import { BiCloudUpload } from "react-icons/bi";
+import { MdDelete } from "react-icons/md";
 
 import { storage } from "../config/firebase.config";
 import { UseStateValue } from "../context/StateProvider";
+// import FilterButtons from "./FilterButtons";
 import {
   getAllAlbums,
   getAllArtists,
@@ -21,7 +24,10 @@ import {
   saveNewSong,
 } from "../api";
 import { actionType } from "../context/reducer";
-
+// import { filterByLanguage, filters } from "../utils/supportfunctions";
+import { IoMusicalNote } from "react-icons/io5";
+// import AlertSuccess from "./AlertSuccess";
+// import AlertError from "./AlertError";
 
 export const ImageLoader = ({ progress }) => {
   return (
@@ -105,7 +111,6 @@ export const ImageUploader = ({
   );
 };
 
-
 export const DisabledButton = () => {
   return (
     <button
@@ -134,7 +139,121 @@ export const DisabledButton = () => {
   );
 };
 
+const DashboardNewSong = () => {
+  const [isImageLoading, setIsImageLoading] = useState(false);
+  const [songImageUrl, setSongImageUrl] = useState(null);
+  const [setAlert, setSetAlert] = useState(null);
+  const [alertMsg, setAlertMsg] = useState("");
+  const [uploadProgress, setUploadProgress] = useState(0);
+
+  const [isAudioLoading, setIsAudioLoading] = useState(false);
+
+  const [songName, setSongName] = useState("");
+  const [audioAsset, setAudioAsset] = useState(null);
+  const [duration, setDuration] = useState(null);
+  const audioRef = useRef();
+
+  const [
+    {
+      artists,
+      allAlbums,
+      albumFilter,
+      artistFilter,
+      filterTerm,
+      languageFilter,
+    },
+    dispatch,
+  ] = UseStateValue();
+
+  useEffect(() => {
+    if (!artists) {
+      getAllArtists().then((data) => {
+        dispatch({ type: actionType.SET_ALL_ARTISTS, allArtists: data.data });
+      });
+    }
+
+    if (!allAlbums) {
+      getAllAlbums().then((data) => {
+        dispatch({ type: actionType.SET_ALL_ALBUMS, allAlbums: data.data });
+      });
+    }
+  }, []);
 
 
 
+  const deleteImageObject = (songURL, action) => {
+    if (action === "image") {
+      setIsImageLoading(true);
+      setSongImageUrl(null);
+    } else {
+      setIsAudioLoading(true);
+      setAudioAsset(null);
+    }
+    const deleteRef = ref(storage, songURL);
+    deleteObject(deleteRef).then(() => {
+      setSetAlert("success");
+      setAlertMsg("File removed successfully");
+      setTimeout(() => {
+        setSetAlert(null);
+      }, 4000);
+      setIsImageLoading(false);
+      setIsAudioLoading(false);
+    });
+  };
 
+  const saveSong = () => {
+    if (!songImageUrl || !audioAsset || !songName) {
+      setSetAlert("error");
+      setAlertMsg("Required fields are missing");
+      setTimeout(() => {
+        setSetAlert(null);
+      }, 4000);
+    } else {
+      setIsImageLoading(true);
+      setIsAudioLoading(true);
+      const data = {
+        name: songName,
+        imageUrl: songImageUrl,
+        songUrl: audioAsset,
+        album: albumFilter,
+        artist: artistFilter,
+        language: languageFilter,
+        category: filterTerm,
+      };
+
+      saveNewSong(data).then((res) => {
+        getAllSongs().then((songs) => {
+          dispatch({ type: actionType.SET_ALL_SONGS, allSongs: songs.data });
+        });
+      });
+      setSetAlert("success");
+      setAlertMsg("Data saved successfully");
+      setTimeout(() => {
+        setSetAlert(null);
+      }, 4000);
+      setIsImageLoading(false);
+      setIsAudioLoading(false);
+      setSongName("");
+      setSongImageUrl(null);
+      setAudioAsset(null);
+      dispatch({ type: actionType.SET_ARTIST_FILTER, artistFilter: null });
+      dispatch({ type: actionType.SET_LANGUAGE_FILTER, languageFilter: null });
+      dispatch({ type: actionType.SET_ALBUM_FILTER, albumFilter: null });
+      dispatch({ type: actionType.SET_FILTER_TERM, filterTerm: null });
+      setDuration(null);
+    }
+  };
+
+  return (
+    <div className="flex items-center justify-center p-4 border border-gray-300 rounded-md">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full">
+
+      </div>
+
+    </div>
+  );
+};
+
+
+
+export default DashboardNewSong;

@@ -341,8 +341,85 @@ const DashboardNewSong = () => {
             </div>
           </div>
         </div>
-
+        <div className="flex flex-col items-center justify-center w-full p-4">
+          <p className="font-bold p-2 text-gray-600 m-1">Add New Artists</p>
+          <AddNewArtist />
+          <p className="font-bold p-2 text-gray-600 m-1">Add New Album </p>
+          <AddNewAlbum />
+        </div>
       </div>
+
+    </div>
+  );
+};
+export const AddNewArtist = () => {
+  const [isArtist, setIsArtist] = useState(false);
+  const [artistProgress, setArtistProgress] = useState(0);
+
+  const [alert, setAlert] = useState(false);
+  const [alertMsg, setAlertMsg] = useState(null);
+  const [artistCoverImage, setArtistCoverImage] = useState(null);
+
+  const [artistName, setArtistName] = useState("");
+  const [twitter, setTwitter] = useState("");
+  const [instagram, setInstagram] = useState("");
+
+  const [{ allArtists }, dispatch] = UseStateValue();
+
+  const deleteImageObject = (songURL) => {
+    setIsArtist(true);
+    setArtistCoverImage(null);
+    const deleteRef = ref(storage, songURL);
+    deleteObject(deleteRef).then(() => {
+      setAlert("success");
+      setAlertMsg("File removed successfully");
+      setTimeout(() => {
+        setAlert(null);
+      }, 4000);
+      setIsArtist(false);
+    });
+  };
+
+  const saveArtist = () => {
+    if (!artistCoverImage || !artistName) {
+      setAlert("error");
+      setAlertMsg("Required fields are missing");
+      setTimeout(() => {
+        setAlert(null);
+      }, 4000);
+    } else {
+      setIsArtist(true);
+      const data = {
+        name: artistName,
+        imageUrl: artistCoverImage,
+        twitter: twitter,
+        instagram: instagram,
+      };
+      saveNewArtist(data).then((res) => {
+        getAllArtists().then((artistData) => {
+          dispatch({ type: actionType.SET_ALL_ARTISTS, allArtists: artistData.data });
+        });
+      });
+      setIsArtist(false);
+      setArtistCoverImage(null);
+      setArtistName("");
+      setTwitter("");
+      setInstagram("");
+    }
+  };
+
+  return (
+    <div className="flex items-center justify-evenly w-full flex-wrap">
+
+    </div>
+  );
+};
+
+export const AddNewAlbum = () => {
+
+
+  return (
+    <div className="flex items-center justify-evenly w-full flex-wrap">
 
     </div>
   );

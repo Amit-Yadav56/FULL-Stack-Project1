@@ -5,9 +5,31 @@ import { actionType } from "../context/reducer";
 import { getAllAlbums, deleteAlbumById } from "../api";
 import { motion } from "framer-motion";
 import { MdDelete } from "react-icons/md";
+import { IoAdd } from "react-icons/io5";
+import { NavLink } from "react-router-dom";
+import { AiOutlineClear } from "react-icons/ai";
 
 const DashboardAlbums = () => {
+  const [albumFilter, setAlbumFilter] = useState("");
+  const [isFocus, setIsFocus] = useState(false);
+  const [filteredAlbums, setFilteredAlbums] = useState(null);
   const [{ allAlbums }, dispatch] = UseStateValue()
+
+
+  //used to filter the songs by search
+  useEffect(() => {
+    if (albumFilter.length > 0) {
+      const filtered = allAlbums.filter(
+        (data) =>
+          data.name.toLowerCase().includes(albumFilter)
+      );
+      setFilteredAlbums(filtered);
+    } else {
+      setFilteredAlbums(null);
+    }
+  }, [albumFilter]);
+
+
   useEffect(() => {
     if (!allAlbums) {
       getAllAlbums().then((data) => {
@@ -17,15 +39,71 @@ const DashboardAlbums = () => {
   }, []);
   return (
     <div className="w-full p-4 flex items-center justify-center flex-col">
-      <div className="relative w-full gap-3  my-4 p-4 py-12 border border-gray-300 rounded-md flex flex-wrap justify-evenly">
-        {allAlbums &&
-          allAlbums.map((data, index) => (
-            <>
-              <AlbumCard key={index} data={data} index={index} />
-            </>
-          ))}
 
+      <div className="w-full flex justify-center items-center gap-24">
+        <NavLink
+          to={"/dashboard/newData"}
+          className="flex items-center px-4 py-3 border rounded-md border-gray-300 hover:border-gray-400 hover:shadow-md cursor-pointer"
+        >
+          <IoAdd />
+        </NavLink>
+        <input
+          type="text"
+          placeholder="Search here"
+          className={`w-52 px-4 py-2 border ${isFocus ? "border-black shadow-md" : "border-gray-300"
+            } rounded-md bg-transparent outline-none duration-150 transition-all ease-in-out text-base text-textColor font-semibold`}
+          value={albumFilter}
+          onChange={(e) => setAlbumFilter(e.target.value)}
+          // set the input box border change to black
+          onBlur={() => setIsFocus(false)}
+          onFocus={() => setIsFocus(true)}
+        />
+
+
+        {/* to erase all the filtered songs */}
+        {albumFilter && (
+          <motion.i
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            whileTap={{ scale: 0.75 }}
+            onClick={() => {
+              setAlbumFilter("");
+              setFilteredAlbums(null);
+            }}
+          >
+            <AiOutlineClear className="text-3xl text-textColor cursor-pointer" />
+          </motion.i>
+        )}
       </div>
+
+      {/* section to display the filtered songs */}
+      <div className="relative w-full  my-4 p-4 py-12 border border-gray-300 rounded-md">
+        <div className="absolute top-4 left-4">
+          <p className="text-xl font-bold">
+            <span className="text-sm font-semibold text-textColor">
+              Count :{" "}
+            </span>
+            {filteredAlbums ? filteredAlbums?.length : allAlbums?.length}
+          </p>
+        </div>
+
+        <AlbumContainer data={filteredAlbums ? filteredAlbums : allAlbums} />
+      </div>
+
+
+
+    </div>
+  );
+};
+
+
+export const AlbumContainer = ({ data }) => {
+  return (
+    <div className=" w-full  flex flex-wrap gap-3  items-center justify-evenly">
+      {data &&
+        data.map((album, i) => (
+          <AlbumCard key={album._id} data={album} index={i} />
+        ))}
     </div>
   );
 };

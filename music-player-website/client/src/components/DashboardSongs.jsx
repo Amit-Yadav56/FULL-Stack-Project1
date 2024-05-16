@@ -47,7 +47,7 @@ const DashboardSongs = () => {
     <div className="w-full p-4 flex items-center justify-center flex-col">
       <div className="w-full flex justify-center items-center gap-24">
         <NavLink
-          to={"/dashboard/newSong"}
+          to={"/dashboard/newData"}
           className="flex items-center px-4 py-3 border rounded-md border-gray-300 hover:border-gray-400 hover:shadow-md cursor-pointer"
         >
           <IoAdd />

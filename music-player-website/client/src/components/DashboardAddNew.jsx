@@ -558,7 +558,40 @@ export const AddNewAlbum = () => {
 
   return (
     <div className="flex items-center justify-evenly w-full flex-wrap">
-
+      <div className="bg-card  backdrop-blur-md w-full lg:w-225 h-225 rounded-md border-2 border-dotted border-gray-300 cursor-pointer">
+        {isArtist && <ImageLoader progress={artistProgress} />}
+        {!isArtist && (
+          <>
+            {!artistCoverImage ? (
+              <ImageUploader
+                setImageURL={setArtistCoverImage}
+                setAlert={setAlert}
+                alertMsg={setAlertMsg}
+                isLoading={setIsArtist}
+                setProgress={setArtistProgress}
+                isImage={true}
+              />
+            ) : (
+              <div className="relative w-full h-full overflow-hidden rounded-md">
+                <img
+                  src={artistCoverImage}
+                  alt="uploaded image"
+                  className="w-full h-full object-cover"
+                />
+                <button
+                  type="button"
+                  className="absolute bottom-3 right-3 p-3 rounded-full bg-red-500 text-xl cursor-pointer outline-none hover:shadow-md  duration-500 transition-all ease-in-out"
+                  onClick={() => {
+                    deleteImageObject(artistCoverImage);
+                  }}
+                >
+                  <MdDelete className="text-white" />
+                </button>
+              </div>
+            )}
+          </>
+        )}
+      </div>
       {/* section or adding new artist nam */}
       <div className="flex flex-col items-center justify-center gap-4 ">
         <input

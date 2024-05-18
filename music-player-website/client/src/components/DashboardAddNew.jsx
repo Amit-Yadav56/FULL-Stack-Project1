@@ -559,6 +559,31 @@ export const AddNewAlbum = () => {
   return (
     <div className="flex items-center justify-evenly w-full flex-wrap">
 
+      {/* section or adding new artist nam */}
+      <div className="flex flex-col items-center justify-center gap-4 ">
+        <input
+          type="text"
+          placeholder="Artist Name"
+          className="w-full lg:w-300 p-3 rounded-md text-base font-semibold text-textColor outline-none shadow-sm border border-gray-300 bg-transparent"
+          value={artistName}
+          onChange={(e) => setArtistName(e.target.value)}
+        />
+
+        <div className="w-full lg:w-300 flex items-center justify-center lg:justify-end">
+          {isArtist ? (
+            <DisabledButton />
+          ) : (
+            <motion.button
+              whileTap={{ scale: 0.75 }}
+              className="px-8 py-2 rounded-md text-white bg-red-600 hover:shadow-lg"
+              onClick={saveArtist}
+            >
+              Send
+            </motion.button>
+          )}
+        </div>
+      </div>
+
 
     </div>
   );

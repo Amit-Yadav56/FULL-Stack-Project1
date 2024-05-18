@@ -504,10 +504,61 @@ export const AddNewArtist = () => {
 };
 
 export const AddNewAlbum = () => {
+  const [isArtist, setIsArtist] = useState(false);
+  const [artistProgress, setArtistProgress] = useState(0);
 
+  const [alert, setAlert] = useState(false);
+  const [alertMsg, setAlertMsg] = useState(null);
+  const [artistCoverImage, setArtistCoverImage] = useState(null);
+
+  const [artistName, setArtistName] = useState("");
+
+  const [{ allAlbums }, dispatch] = UseStateValue();
+
+  const deleteImageObject = (songURL) => {
+    setIsArtist(true);
+    setArtistCoverImage(null);
+    const deleteRef = ref(storage, songURL);
+    deleteObject(deleteRef).then(() => {
+      setAlert("success");
+      setAlertMsg("File removed successfully");
+      setTimeout(() => {
+        setAlert(null);
+      }, 4000);
+      setIsArtist(false);
+    });
+  };
+
+  const saveArtist = () => {
+    if (!artistCoverImage || !artistName) {
+      setAlert("error");
+      setAlertMsg("Required fields are missing");
+      setTimeout(() => {
+        setAlert(null);
+      }, 4000);
+    } else {
+      setIsArtist(true);
+      const data = {
+        name: artistName,
+        imageUrl: artistCoverImage,
+      };
+      saveNewAlbum(data).then((res) => {
+        getAllAlbums().then((albumData) => {
+          dispatch({
+            type: actionType.SET_ALL_ALBUMS,
+            allAlbums: albumData.data,
+          });
+        });
+      });
+      setIsArtist(false);
+      setArtistCoverImage(null);
+      setArtistName("");
+    }
+  };
 
   return (
     <div className="flex items-center justify-evenly w-full flex-wrap">
+
 
     </div>
   );

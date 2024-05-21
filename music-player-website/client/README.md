@@ -1,3 +1,6 @@
+# Description
+This is a prototype website created by Amit(BCA from SRM University)for a MERN Stack Music Player
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

@@ -12,4 +12,5 @@ export { default as DashboardArtists } from './DashboardArtists';
 export { default as DashboardNewSong } from './DashboardAddNew';
 
 export { default as AddNewArtist } from './DashboardAddNew';
+export { default as UserProfile } from './UserProfile';
 

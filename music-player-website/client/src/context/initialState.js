@@ -9,5 +9,6 @@ export const initialState = {
     languageFilter: null,
     albumFilter: null,
     song: 0,
-    isSongPlaying: null
+    isSongPlaying: null,
+    filterTerm: null
 }

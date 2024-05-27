@@ -14,7 +14,8 @@ import { MdDelete } from "react-icons/md";
 
 import { storage } from "../config/firebase.config";
 import { UseStateValue } from "../context/StateProvider";
-// import FilterButtons from "./FilterButtons";
+
+import FilterButtons from "./FilterButtons";
 import {
   getAllAlbums,
   getAllArtists,
@@ -24,10 +25,10 @@ import {
   saveNewSong,
 } from "../api";
 import { actionType } from "../context/reducer";
-// import { filterByLanguage, filters } from "../utils/supportfunctions";
 import { IoMusicalNote } from "react-icons/io5";
 // import AlertSuccess from "./AlertSuccess";
 // import AlertError from "./AlertError";
+import { filters, filterByLanguage } from "../utils/supportFunctions";
 
 export const ImageLoader = ({ progress }) => {
   return (
@@ -156,7 +157,7 @@ const DashboardNewSong = () => {
 
   const [
     {
-      artists,
+      allArtists,
       allAlbums,
       albumFilter,
       artistFilter,
@@ -167,7 +168,7 @@ const DashboardNewSong = () => {
   ] = UseStateValue();
 
   useEffect(() => {
-    if (!artists) {
+    if (!allArtists) {
       getAllArtists().then((data) => {
         dispatch({ type: actionType.SET_ALL_ARTISTS, allArtists: data.data });
       });
@@ -259,6 +260,14 @@ const DashboardNewSong = () => {
             onChange={(e) => setSongName(e.target.value)}
           />
 
+
+          {/*All buttons for filtering */}
+          <div className="flex w-full justify-between flex-wrap items-center gap-4">
+            <FilterButtons filterData={allArtists} flag={"Artist"} />
+            <FilterButtons filterData={allAlbums} flag={"Albums"} />
+            <FilterButtons filterData={filterByLanguage} flag={"Language"} />
+            <FilterButtons filterData={filters} flag={"Category"} />
+          </div>
 
 
           <div className="flex items-center justify-between gap-2 w-full flex-wrap">

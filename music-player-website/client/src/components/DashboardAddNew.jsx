@@ -26,10 +26,10 @@ import {
 } from "../api";
 import { actionType } from "../context/reducer";
 import { IoMusicalNote } from "react-icons/io5";
-// import AlertSuccess from "./AlertSuccess";
-// import AlertError from "./AlertError";
 import { filters, filterByLanguage } from "../utils/supportFunctions";
 
+import AlertSuccess from "./AlertSuccess";
+import AlertError from "./AlertError";
 export const ImageLoader = ({ progress }) => {
   return (
     <div className="w-full h-full flex flex-col items-center justify-center">
@@ -143,7 +143,7 @@ export const DisabledButton = () => {
 const DashboardNewSong = () => {
   const [isImageLoading, setIsImageLoading] = useState(false);
   const [songImageUrl, setSongImageUrl] = useState(null);
-  const [setAlert, setSetAlert] = useState(null);
+  const [alert, setAlert] = useState(null);
   const [alertMsg, setAlertMsg] = useState("");
   const [uploadProgress, setUploadProgress] = useState(0);
 
@@ -193,10 +193,10 @@ const DashboardNewSong = () => {
     }
     const deleteRef = ref(storage, songURL);
     deleteObject(deleteRef).then(() => {
-      setSetAlert("success");
+      setAlert("success");
       setAlertMsg("File removed successfully");
       setTimeout(() => {
-        setSetAlert(null);
+        setAlert(null);
       }, 4000);
       setIsImageLoading(false);
       setIsAudioLoading(false);
@@ -205,10 +205,10 @@ const DashboardNewSong = () => {
 
   const saveSong = () => {
     if (!songImageUrl || !audioAsset || !songName) {
-      setSetAlert("error");
+      setAlert("error");
       setAlertMsg("Required fields are missing");
       setTimeout(() => {
-        setSetAlert(null);
+        setAlert(null);
       }, 4000);
     } else {
       setIsImageLoading(true);
@@ -228,10 +228,10 @@ const DashboardNewSong = () => {
           dispatch({ type: actionType.SET_ALL_SONGS, allSongs: songs.data });
         });
       });
-      setSetAlert("success");
+      setAlert("success");
       setAlertMsg("Data saved successfully");
       setTimeout(() => {
-        setSetAlert(null);
+        setAlert(null);
       }, 4000);
       setIsImageLoading(false);
       setIsAudioLoading(false);
@@ -278,7 +278,7 @@ const DashboardNewSong = () => {
                   {!songImageUrl ? (
                     <ImageUploader
                       setImageURL={setSongImageUrl}
-                      setAlert={setSetAlert}
+                      setAlert={setAlert}
                       alertMsg={setAlertMsg}
                       isLoading={setIsImageLoading}
                       setProgress={setUploadProgress}
@@ -313,7 +313,7 @@ const DashboardNewSong = () => {
                   {!audioAsset ? (
                     <ImageUploader
                       setImageURL={setAudioAsset}
-                      setAlert={setSetAlert}
+                      setAlert={setAlert}
                       alertMsg={setAlertMsg}
                       isLoading={setIsAudioLoading}
                       setProgress={setUploadProgress}
@@ -361,6 +361,16 @@ const DashboardNewSong = () => {
         </div>
       </div>
 
+
+      {alert && (
+        <>
+          {alert === "success" ? (
+            <AlertSuccess msg={alertMsg} />
+          ) : (
+            <AlertError msg={alertMsg} />
+          )}
+        </>
+      )}
     </div>
   );
 };
@@ -507,6 +517,15 @@ export const AddNewArtist = () => {
         </div>
       </div>
 
+      {alert && (
+        <>
+          {alert === "success" ? (
+            <AlertSuccess msg={alertMsg} />
+          ) : (
+            <AlertError msg={alertMsg} />
+          )}
+        </>
+      )}
 
     </div>
   );
@@ -558,7 +577,13 @@ export const AddNewAlbum = () => {
             allAlbums: albumData.data,
           });
         });
+
       });
+      setAlert("success");
+      setAlertMsg("Artist added sucessfully");
+      setTimeout(() => {
+        setAlert(null);
+      }, 4000);
       setIsArtist(false);
       setArtistCoverImage(null);
       setArtistName("");
@@ -627,6 +652,15 @@ export const AddNewAlbum = () => {
       </div>
 
 
+      {alert && (
+        <>
+          {alert === "success" ? (
+            <AlertSuccess msg={alertMsg} />
+          ) : (
+            <AlertError msg={alertMsg} />
+          )}
+        </>
+      )}
     </div>
   );
 };

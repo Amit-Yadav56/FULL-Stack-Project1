@@ -12,6 +12,7 @@ export const actionType = {
     SET_LANGUAGE_FILTER: "SET_LANGUAGE_FILTER",
     SET_ALBUM_FILTER: "SET_ALBUM_FILTER",
     SET_FILTER_TERM: "SET_FILTER_TERM",
+    SET_MINI_PLAYER: "SET_MINI_PLAYER",
     SET_SONG: "SET_SONG",
 }
 
@@ -83,6 +84,11 @@ const reducer = (state, action) => {
             return {
                 ...state,
                 song: action.song,
+            };
+        case actionType.SET_MINI_PLAYER:
+            return {
+                ...state,
+                miniPlayer: action.miniPlayer,
             };
 
 

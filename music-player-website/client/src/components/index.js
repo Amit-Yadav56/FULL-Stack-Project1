@@ -13,4 +13,11 @@ export { default as DashboardNewSong } from './DashboardAddNew';
 
 export { default as AddNewArtist } from './DashboardAddNew';
 export { default as UserProfile } from './UserProfile';
+export { default as MusicPlayer } from './MusicPlayer';
+export { default as AlertSuccess } from './AlertSuccess';
+export { default as AlertError } from './AlertError';
+export { default as FilterButtons } from './FilterButtons';
+export { default as SearchBar } from './SearchBar';
+
+
 

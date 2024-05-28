@@ -8,6 +8,8 @@ import { MdDelete } from "react-icons/md";
 import { IoAdd } from "react-icons/io5";
 import { NavLink } from "react-router-dom";
 import { AiOutlineClear } from "react-icons/ai";
+import AlertSuccess from "./AlertSuccess";
+import AlertError from "./AlertError";
 
 const DashboardAlbums = () => {
   const [albumFilter, setAlbumFilter] = useState("");
@@ -110,6 +112,8 @@ export const AlbumContainer = ({ data }) => {
 
 
 export const AlbumCard = ({ data, index }) => {
+  const [alert, setAlert] = useState(false);
+  const [alertMsg, setAlertMsg] = useState(null);
   const [isDelete, setIsDelete] = useState(false);
   const [{ allAlbums }, dispatch] = UseStateValue()
   return (

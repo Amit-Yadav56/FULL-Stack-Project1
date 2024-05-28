@@ -10,5 +10,7 @@ export const initialState = {
     albumFilter: null,
     song: 0,
     isSongPlaying: null,
-    filterTerm: null
+    filterTerm: null,
+
+    miniPlayer: false,
 }

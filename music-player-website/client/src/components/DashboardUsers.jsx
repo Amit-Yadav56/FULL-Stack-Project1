@@ -7,28 +7,50 @@ import { useState } from 'react';
 import { getAllUsers, changingUserRole, deleteUser } from '../api';
 import { MdDelete } from "react-icons/md";
 import { actionType } from "../context/reducer";
+import AlertSuccess from "./AlertSuccess"
+import AlertError from "./AlertError"
 
 export const DashboardUserCard = ({ data, index }) => {
   const [{ user, allUsers }, dispatch] = UseStateValue()
   const createdTime = moment(new Date(data.createdAt)).format("MMMM Do YYYY")
   const [isUserRoleUpdated, setisUserRoleUpdated] = useState(false)
+  const [alert, setAlert] = useState(null);
+  const [alertMsg, setAlertMsg] = useState(null);
 
   const UpdateUserRole = (userId, role) => {
     changingUserRole(userId, role).then((res) => {
       if (res) {
+        setAlert("success");
+        console.log(alert)
+        setAlertMsg("Role updated successfully");
+        setTimeout(() => {
+          setAlert(null);
+        }, 4000);
         getAllUsers().then((data) => {
           dispatch({
             type: actionType.SET_ALL_USERS,
             allUsers: data.data,
           });
         });
+
+      }
+      else {
+        setAlert("error");
+        setAlertMsg("Role cannot be updated successfully");
+        setTimeout(() => {
+          setAlert(null);
+        }, 4000);
 
       }
     });
   };
   const deleteUserData = (userId) => {
     deleteUser(userId).then((res) => {
+
       if (res) {
+        setAlert("success");
+        console.log(alert)
+        setAlertMsg("Role updated successfully");
         getAllUsers().then((data) => {
           dispatch({
             type: actionType.SET_ALL_USERS,
@@ -39,6 +61,7 @@ export const DashboardUserCard = ({ data, index }) => {
       }
     });
   };
+
 
 
   return (
@@ -128,7 +151,15 @@ export const DashboardUserCard = ({ data, index }) => {
 
       </div>
 
-
+      {alert && (
+        <>
+          {alert == "success" ? (
+            <AlertSuccess msg={alertMsg} />
+          ) : (
+            <AlertError msg={alertMsg} />
+          )}
+        </>
+      )}
     </motion.div>
   )
 }
@@ -171,6 +202,7 @@ const DashboardUsers = () => {
           )
         }
       </div>
+
     </div>
   )
 }

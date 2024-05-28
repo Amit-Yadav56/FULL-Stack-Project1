@@ -73,7 +73,7 @@ export const changingUserRole = async (userId, role) => {
 export const deleteUser = async (user_id) => {
     try {
         const res = await axios.delete(`${baseUrl}api/users/deleteUser/${user_id}`)
-        return res.data
+        return res
     } catch (error) {
         return null
     }
@@ -83,7 +83,7 @@ export const deleteUser = async (user_id) => {
 export const deleteSongById = async (song_id) => {
     try {
         const res = await axios.delete(`${baseUrl}api/songs/deleteSong/${song_id}`)
-        return res.data
+        return res
     } catch (error) {
         return null
     }

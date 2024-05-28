@@ -1,10 +1,10 @@
 import React from "react";
 import { IoSearch } from "react-icons/io5";
-import { actionType } from "../Context/reducer";
-import { useStateValue } from "../context/StateProvider";
+import { actionType } from "../context/reducer";
+import { UseStateValue } from "../context/StateProvider";
 
 const SearchBar = () => {
-  const [{ searchTerm }, dispatch] = useStateValue();
+  const [{ searchTerm }, dispatch] = UseStateValue();
 
   const setSearchTerm = (value) => {
     dispatch({

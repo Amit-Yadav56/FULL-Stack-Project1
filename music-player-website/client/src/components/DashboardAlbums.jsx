@@ -151,6 +151,13 @@ export const AlbumCard = ({ data, index }) => {
               onClick={() => {
                 deleteAlbumById(data._id).then((res) => {
                   if (res) {
+                    setAlert("success");
+                    console.log(alert)
+                    setAlertMsg("File removed successfully");
+                    console.log(alertMsg)
+                    setTimeout(() => {
+                      setAlert(null);
+                    }, 4000);
                     getAllAlbums().then((d) => {
                       dispatch({
                         type: actionType.SET_ALL_ALBUMS,
@@ -173,6 +180,15 @@ export const AlbumCard = ({ data, index }) => {
             </div>
           </div>
         </motion.div>
+      )}
+      {alert && (
+        <>
+          {alert == "success" ? (
+            <AlertSuccess msg={alertMsg} />
+          ) : (
+            <AlertError msg={alertMsg} />
+          )}
+        </>
       )}
     </motion.div>
   )

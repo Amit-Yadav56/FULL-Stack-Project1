@@ -4,8 +4,11 @@ import { AiOutlineClear } from "react-icons/ai";
 import { deleteSongById, getAllSongs } from "../api";
 import { UseStateValue } from '../context/StateProvider'
 import { actionType } from "../context/reducer";
+import AlertSuccess from "./AlertSuccess";
+import AlertError from "./AlertError";
 import { IoAdd, IoPause, IoPlay, IoTrash } from "react-icons/io5";
 import { NavLink } from "react-router-dom";
+
 
 const DashboardSongs = () => {
   const [songFilter, setSongFilter] = useState("");
@@ -134,16 +137,24 @@ export const SongCard = ({ data, index }) => {
   };
 
   const deleteObject = (id) => {
+
+    setAlert("success")
+    setAlertMsg("File removed successfully");
+    setTimeout(() => {
+      setAlert(null);
+    }, 4000);
     deleteSongById(id).then((res) => {
-      if (res) {
+      if (res.data.success) {
+
+
         getAllSongs().then((data) => {
           dispatch({
             type: actionType.SET_ALL_SONGS,
             allSongs: data.data,
           });
         });
-      }
 
+      }
     });
   };
   return (
@@ -172,6 +183,7 @@ export const SongCard = ({ data, index }) => {
               className="text-sm px-4 py-1 rounded-md text-white hover:shadow-md bg-teal-400"
               onClick={() => {
                 deleteObject(data._id)
+
                 setIsDeleted(false)
               }
               }
@@ -208,7 +220,15 @@ export const SongCard = ({ data, index }) => {
         </motion.i>
       </div>
 
-
+      {alert && (
+        <>
+          {alert !== "success" ? (
+            <AlertError msg={alertMsg} />
+          ) : (
+            <AlertSuccess msg={alertMsg} />
+          )}
+        </>
+      )}
 
     </motion.div>
   );

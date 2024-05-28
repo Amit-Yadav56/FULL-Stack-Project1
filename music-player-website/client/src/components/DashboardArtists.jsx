@@ -10,6 +10,8 @@ import { deleteArtistById, getAllArtists } from "../api";
 import { actionType } from "../context/reducer";
 import { NavLink } from "react-router-dom";
 import { AiOutlineClear } from "react-icons/ai";
+import AlertSuccess from "./AlertSuccess";
+import AlertError from "./AlertError";
 
 const DashboardArtist = () => {
 
@@ -111,6 +113,9 @@ export const ArtistContainer = ({ data }) => {
 };
 
 export const ArtistCard = ({ data, index }) => {
+
+  const [alert, setAlert] = useState(false);
+  const [alertMsg, setAlertMsg] = useState(null);
   const [isDelete, setIsDelete] = useState(false);
   const [{ allArtists }, dispatch] = UseStateValue();
   return (
@@ -163,6 +168,13 @@ export const ArtistCard = ({ data, index }) => {
               onClick={() => {
                 deleteArtistById(data._id).then((res) => {
                   if (res) {
+                    setAlert("success");
+                    console.log(alert)
+                    setAlertMsg("File removed successfully");
+                    console.log(alertMsg)
+                    setTimeout(() => {
+                      setAlert(null);
+                    }, 4000);
                     getAllArtists().then((data) => {
                       dispatch({
                         type: actionType.SET_ALL_ARTISTS,
@@ -186,6 +198,15 @@ export const ArtistCard = ({ data, index }) => {
             </div>
           </div>
         </motion.div>
+      )}
+      {alert && (
+        <>
+          {alert == "success" ? (
+            <AlertSuccess msg={alertMsg} />
+          ) : (
+            <AlertError msg={alertMsg} />
+          )}
+        </>
       )}
     </motion.div>
   );

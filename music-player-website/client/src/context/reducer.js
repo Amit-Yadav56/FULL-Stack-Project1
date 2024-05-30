@@ -14,6 +14,7 @@ export const actionType = {
     SET_FILTER_TERM: "SET_FILTER_TERM",
     SET_MINI_PLAYER: "SET_MINI_PLAYER",
     SET_SONG: "SET_SONG",
+    SET_SEARCH_TERM: "SET_SEARCH_TERM",
 }
 
 const reducer = (state, action) => {
@@ -90,6 +91,12 @@ const reducer = (state, action) => {
                 ...state,
                 miniPlayer: action.miniPlayer,
             };
+        case actionType.SET_SEARCH_TERM:
+            return {
+                ...state,
+                searchTerm: action.searchTerm,
+            };
+
 
 
         default:

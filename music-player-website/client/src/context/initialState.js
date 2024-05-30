@@ -11,6 +11,7 @@ export const initialState = {
     song: 0,
     isSongPlaying: null,
     filterTerm: null,
-
+    searchTerm: "",
     miniPlayer: false,
+    likedSongs: null
 }

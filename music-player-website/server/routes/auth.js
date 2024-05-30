@@ -1,9 +1,13 @@
 const router = require("express").Router();
 //importing admin prevalages
 const admin = require("../config/firebase.config");
+const { default: mongoose } = require("mongoose");
 
 //importing database models
 const user = require("../models/user")
+// const LikedSong = require("../models/user")
+
+const song = require("../models/song")
 
 
 router.get("/login", async (req, res) => {
@@ -56,6 +60,93 @@ const newUserData = async (decodeValue, req, res) => {
         res.status(400).send({ sucess: false, msg: error })
     }
 }
+//new liked song
+router.post('/:userId/liked-songs/saveNew/:songId', async (req, res) => {
+    try {
+
+        // const { userId, songId } = req.params;
+        const filter_user = { _id: req.params.userId };
+        const filter_song = { _id: req.params.songId };
+
+        const options = {
+            upsert: true,
+            new: true,
+        };
+
+
+        // Fetch the user document
+        const User = await user.findOne(filter_user)
+        if (!User) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        // Fetch the song information based on songId
+        const Song = await song.findOne(filter_song);
+        if (!Song) {
+            return res.status(404).json({ error: 'Song not found' });
+        }
+
+        // Add the song to the user's liked songs array
+        User.liked_songs.push({
+            name: Song.name,
+            imageUrl: Song.imageUrl,
+            songUrl: Song.songUrl,
+            album: Song.album,
+            artist: Song.artist,
+            language: Song.language,
+            category: Song.category,
+            _id: new mongoose.Types.ObjectId(),
+        });
+
+        // Save the updated user document
+        await User.save();
+
+        return res.status(200).json({ message: 'Song added to liked songs' });
+    } catch (error) {
+        console.error('Error adding song to liked songs:', error);
+        return res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+//remove from liked songs
+router.delete('/:userId/liked-songs/delete/:songId', async (req, res) => {
+    try {
+
+        const songId = req.params.songId;
+        const filter_user = { _id: req.params.userId };
+        const filter_song = { _id: req.params.songId };
+
+        const options = {
+            upsert: true,
+            new: true,
+        };
+
+
+        // Fetch the user document
+        const User = await user.findOne(filter_user)
+        if (!User) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        // Fetch the song information based on songId
+
+        const index = User.liked_songs.findIndex(songs => songs._id.toString() === songId);
+        if (index === -1) {
+            return res.status(404).json({ error: 'Song not found in liked songs', indexis: index });
+        }
+
+        // Remove the song from the liked_songs array
+        User.liked_songs.splice(index, 1);
+
+        //Save the updated user document
+        await User.save();
+
+        return res.status(200).json({ message: 'Song removed from liked songs' });
+    } catch (error) {
+        console.error('Error removing song from liked songs:', error);
+        return res.status(500).json({ error: 'Internal server error' });
+    }
+});
 
 //update the data already present in database
 const updateNewUserData = async (decodeValue, req, res) => {
@@ -115,6 +206,7 @@ router.delete('/deleteUser/:id', async (req, res) => {
     }
 
 })
+
 
 
 module.exports = router;

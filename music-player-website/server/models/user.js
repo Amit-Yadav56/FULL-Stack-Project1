@@ -1,4 +1,25 @@
 const { default: mongoose } = require("mongoose");
+
+
+const likedSongSchema = mongoose.Schema({
+    name: {
+        type: String,
+        required: true
+    },
+    imageUrl: {
+        type: String,
+        required: true
+    },
+    songUrl: {
+        type: String,
+        required: true
+    },
+    album: String,
+    artist: String,
+    language: String,
+    category: String,
+    _id: { type: mongoose.Schema.Types.ObjectId, default: mongoose.Types.ObjectId },
+});
 //make structure of the database
 const userSchema = mongoose.Schema({
     name: {
@@ -29,10 +50,13 @@ const userSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    liked_songs: [likedSongSchema]
+
 
 },
     // mongodb automatically provides timestamps
     { timestamps: true }
 )
-//collection name is user
-module.exports = mongoose.model("user", userSchema)
+// // Export the schemas
+
+module.exports = mongoose.model('user', userSchema); 

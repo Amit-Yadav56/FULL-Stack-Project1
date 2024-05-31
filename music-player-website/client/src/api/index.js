@@ -134,6 +134,15 @@ export const saveNewSong = async (data) => {
     }
 };
 
+export const addToLikedSongs = async (song_id, user_id) => {
+    try {
+        const res = await axios.post(`${baseUrl}/api/users/${user_id}/liked-songs/addSong/${song_id}`)
+        return res.data
+    } catch (error) {
+        return error
+    }
+}
+
 
 
 

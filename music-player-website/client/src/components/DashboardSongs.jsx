@@ -6,7 +6,7 @@ import { UseStateValue } from '../context/StateProvider'
 import { actionType } from "../context/reducer";
 import AlertSuccess from "./AlertSuccess";
 import AlertError from "./AlertError";
-import { IoAdd, IoPause, IoPlay, IoTrash } from "react-icons/io5";
+import { IoAdd, IoPause, IoPlay, IoTrash, IoHeart } from "react-icons/io5";
 import { NavLink } from "react-router-dom";
 
 
@@ -116,8 +116,10 @@ export const SongContainer = ({ data }) => {
 
 export const SongCard = ({ data, index }) => {
   const [isDeleted, setIsDeleted] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
   const [alert, setAlert] = useState(false);
   const [alertMsg, setAlertMsg] = useState(null);
+
 
   const [{ allSongs, song, isSongPlaying }, dispatch] = UseStateValue();
 
@@ -214,9 +216,19 @@ export const SongCard = ({ data, index }) => {
         <span className="block text-sm text-gray-400 my-1">{data.artist}</span>
       </p>
 
-      <div className="w-full absolute bottom-2 right-2 flex items-center justify-between px-4" onClick={() => setIsDeleted(true)}>
-        <motion.i whileTap={{ scale: 0.75 }} >
-          <IoTrash className="text-base text-red-400 drop-shadow-md hover:text-red-600" />
+      <div className="w-full absolute bottom-2 flex items-center justify-between px-4" >
+        <motion.i whileTap={{ scale: 0.75 }} onClick={() => setIsDeleted(true)} >
+          <IoTrash className="w-[25px] h-[25px] text-base text-red-400 drop-shadow-md hover:text-red-600" />
+
+        </motion.i>
+        <motion.i whileTap={{ scale: 0.75 }} onClick={() => {
+          if (isLiked) {
+            setIsLiked(false)
+          } else {
+            setIsLiked(true)
+          }
+        }} >
+          <IoHeart className={`w-[30px] h-[30px] text-base drop-shadow-md  ${isLiked ? 'text-red-500' : 'text-gray-400'}`} />
         </motion.i>
       </div>
 

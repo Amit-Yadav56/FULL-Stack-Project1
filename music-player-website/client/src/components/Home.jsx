@@ -7,7 +7,7 @@ import Filter from "./Filter";
 import Header from "./Header";
 import SearchBar from "./SearchBar";
 import { motion } from "framer-motion";
-
+import { IoHeart } from "react-icons/io5";
 const Home = () => {
     const [
         {
@@ -117,6 +117,8 @@ const Home = () => {
 export const HomeSongContainer = ({ music }) => {
     const [{ isSongPlaying, song }, dispatch] = UseStateValue();
 
+    const [isLiked, setIsLiked] = useState(false);
+
     const addSongToContext = (index) => {
         if (!isSongPlaying) {
             dispatch({
@@ -136,7 +138,6 @@ export const HomeSongContainer = ({ music }) => {
             {music?.map((data, index) => (
                 <motion.div
                     key={data._id}
-                    whileTap={{ scale: 0.8 }}
                     initial={{ opacity: 0, translateX: -50 }}
                     animate={{ opacity: 1, translateX: 0 }}
                     transition={{ duration: 0.3, delay: index * 0.1 }}
@@ -158,6 +159,18 @@ export const HomeSongContainer = ({ music }) => {
                             {data.artist}
                         </span>
                     </p>
+                    <div className="w-full absolute bottom-2 flex items-center justify-end px-4" onClick={() => {
+                        if (isLiked) {
+                            setIsLiked(false)
+                        } else {
+                            setIsLiked(true)
+                        }
+                    }}  >
+
+                        <motion.i whileTap={{ scale: 0.75 }} >
+                            <IoHeart className={`w-[30px] h-[30px] text-base drop-shadow-md  ${isLiked ? 'text-red-500' : 'text-gray-400'}`} />
+                        </motion.i>
+                    </div>
                 </motion.div>
             ))}
         </>

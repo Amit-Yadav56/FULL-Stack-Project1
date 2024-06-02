@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { AiOutlineClear } from "react-icons/ai";
-import { deleteSongById, getAllSongs } from "../api";
+import { deleteSongById, getAllSongs, addToLikedSongs, removeFromLikedSongs } from "../api";
 import { UseStateValue } from '../context/StateProvider'
 import { actionType } from "../context/reducer";
 import AlertSuccess from "./AlertSuccess";
@@ -127,17 +127,21 @@ export const SongCard = ({ data, index }) => {
   //check if song is liked and if yes display it
 
   useEffect(() => {
+
     if (user?.user?.liked_songs) {
       const indexOfLikedSong = user.user.liked_songs.findIndex(
         likedSong => likedSong._id.toString() === data._id
       );
       if (indexOfLikedSong !== -1) {
-        setIsLiked(true);
-      } else {
+
         setIsLiked(true);
       }
+      else {
+        setIsLiked(false)
+      }
     }
-  }, [user, song]);
+
+  }, [user, data]);
   const addSongToContext = () => {
     if (!isSongPlaying) {
       dispatch({
@@ -184,7 +188,7 @@ export const SongCard = ({ data, index }) => {
       animate={{ opacity: 1, translateX: 0 }}
       transition={{ duration: 0.3, delay: index * 0.1 }}
       className="relative w-40 min-w-210 px-2 py-4 cursor-pointer hover:shadow-xl hover:bg-card bg-gray-100 shadow-md rounded-lg flex flex-col items-center"
-      onClick={addSongToContext}
+
     >
 
       {isDeleted && (
@@ -226,6 +230,8 @@ export const SongCard = ({ data, index }) => {
           src={data.imageUrl}
           alt="no image"
           className=" w-full h-full rounded-lg object-cover"
+          onClick={addSongToContext}
+          whileTap={{ scale: 0.7 }}
         />
       </div>
 
@@ -235,15 +241,42 @@ export const SongCard = ({ data, index }) => {
       </p>
 
       <div className="w-full absolute bottom-2 flex items-center justify-between px-4" >
-        <motion.i whileTap={{ scale: 0.75 }} onClick={() => setIsDeleted(true)} >
+        <motion.i whileTap={{ scale: 0.75 }} onClick={() => {
+          setIsDeleted(true
+
+          )
+        }} >
           <IoTrash className="w-[25px] h-[25px] text-base text-red-400 drop-shadow-md hover:text-red-600" />
 
         </motion.i>
         <motion.i whileTap={{ scale: 0.75 }} onClick={() => {
           if (isLiked) {
-            setIsLiked(false)
+            removeFromLikedSongs(user.user._id, data._id).then((res) => {
+              if (res) {
+                setIsLiked(false)
+              } else {
+                setAlert(true);
+                setAlertMsg("Song cannot be liked");
+                setTimeout(() => {
+                  setAlert(null);
+                }, 4000);
+
+              }
+            })
+
           } else {
-            setIsLiked(true)
+            addToLikedSongs(user.user._id, data._id).then((res) => {
+              if (res) {
+                setIsLiked(true)
+              } else {
+                setAlert(true);
+                setAlertMsg("Song cannot be liked");
+                setTimeout(() => {
+                  setAlert(null);
+                }, 4000);
+
+              }
+            })
           }
         }} >
           <IoHeart className={`w-[30px] h-[30px] text-base drop-shadow-md  ${isLiked ? 'text-red-500' : 'text-gray-400'}`} />
@@ -260,7 +293,12 @@ export const SongCard = ({ data, index }) => {
         </>
       )}
 
+      {alert && (
+        <>
+          <AlertError msg={alertMsg} />
 
+        </>
+      )}
     </motion.div>
   );
 };

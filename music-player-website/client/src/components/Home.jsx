@@ -115,7 +115,7 @@ const Home = () => {
 };
 
 export const HomeSongContainer = ({ music }) => {
-    const [{ isSongPlaying, song }, dispatch] = UseStateValue();
+    const [{ isSongPlaying, song, user }, dispatch] = UseStateValue();
 
     const [isLiked, setIsLiked] = useState(false);
 
@@ -133,6 +133,20 @@ export const HomeSongContainer = ({ music }) => {
             });
         }
     };
+    //check if song is liked and if yes display it
+    useEffect(() => {
+
+        if (user?.user?.liked_songs) {
+            const indexOfLikedSong = user.user.liked_songs.findIndex(
+                likedSong => likedSong._id.toString() === song._id
+            );
+            if (indexOfLikedSong !== -1) {
+                setIsLiked(true);
+            } else {
+                setIsLiked(true);
+            }
+        }
+    }, [user, song]);
     return (
         <>
             {music?.map((data, index) => (
@@ -142,7 +156,7 @@ export const HomeSongContainer = ({ music }) => {
                     animate={{ opacity: 1, translateX: 0 }}
                     transition={{ duration: 0.3, delay: index * 0.1 }}
                     className="relative w-40 min-w-210 px-2 py-4 cursor-pointer hover:shadow-xl hover:bg-card bg-gray-100 shadow-md rounded-lg flex flex-col items-center"
-                    onClick={() => addSongToContext(index)}
+
                 >
                     <div className="w-40 min-w-[160px] h-40 min-h-[160px] rounded-lg drop-shadow-lg relative overflow-hidden">
                         <motion.img
@@ -150,6 +164,8 @@ export const HomeSongContainer = ({ music }) => {
                             src={data.imageUrl}
                             alt=""
                             className=" w-full h-full rounded-lg object-cover"
+                            whileTap={{ scale: 0.7 }}
+                            onClick={() => addSongToContext(index)}
                         />
                     </div>
 
@@ -171,6 +187,7 @@ export const HomeSongContainer = ({ music }) => {
                             <IoHeart className={`w-[30px] h-[30px] text-base drop-shadow-md  ${isLiked ? 'text-red-500' : 'text-gray-400'}`} />
                         </motion.i>
                     </div>
+
                 </motion.div>
             ))}
         </>

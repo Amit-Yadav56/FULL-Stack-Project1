@@ -95,7 +95,7 @@ router.post('/:userId/liked-songs/saveNew/:songId', async (req, res) => {
             artist: Song.artist,
             language: Song.language,
             category: Song.category,
-            _id: new mongoose.Types.ObjectId(),
+            _id: Song._id
         });
 
         // Save the updated user document

@@ -121,8 +121,23 @@ export const SongCard = ({ data, index }) => {
   const [alertMsg, setAlertMsg] = useState(null);
 
 
-  const [{ allSongs, song, isSongPlaying }, dispatch] = UseStateValue();
 
+  const [{ allSongs, song, isSongPlaying, user }, dispatch] = UseStateValue();
+
+  //check if song is liked and if yes display it
+
+  useEffect(() => {
+    if (user?.user?.liked_songs) {
+      const indexOfLikedSong = user.user.liked_songs.findIndex(
+        likedSong => likedSong._id.toString() === data._id
+      );
+      if (indexOfLikedSong !== -1) {
+        setIsLiked(true);
+      } else {
+        setIsLiked(true);
+      }
+    }
+  }, [user, song]);
   const addSongToContext = () => {
     if (!isSongPlaying) {
       dispatch({
@@ -137,6 +152,8 @@ export const SongCard = ({ data, index }) => {
       });
     }
   };
+
+
 
   const deleteObject = (id) => {
 
@@ -169,6 +186,7 @@ export const SongCard = ({ data, index }) => {
       className="relative w-40 min-w-210 px-2 py-4 cursor-pointer hover:shadow-xl hover:bg-card bg-gray-100 shadow-md rounded-lg flex flex-col items-center"
       onClick={addSongToContext}
     >
+
       {isDeleted && (
         <motion.div
           initial={{ opacity: 0, scale: 0.6 }}
@@ -241,6 +259,7 @@ export const SongCard = ({ data, index }) => {
           )}
         </>
       )}
+
 
     </motion.div>
   );

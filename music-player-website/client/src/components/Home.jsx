@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { getAllSongs } from "../api";
+import { getAllSongs, addToLikedSongs, removeFromLikedSongs } from "../api";
 import { actionType } from "../context/reducer";
 import { UseStateValue } from "../context/StateProvider";
-import { SongCard } from "./DashboardSongs";
 import Filter from "./Filter";
 import Header from "./Header";
 import SearchBar from "./SearchBar";
 import { motion } from "framer-motion";
 import { IoHeart } from "react-icons/io5";
+import AlertError from "./AlertError";
 const Home = () => {
     const [
         {
@@ -116,6 +116,8 @@ const Home = () => {
 
 export const HomeSongContainer = ({ music }) => {
     const [{ isSongPlaying, song, user }, dispatch] = UseStateValue();
+    const [alert, setAlert] = useState(false)
+    const [alertMsg, setAlertMsg] = useState(null)
 
     const [isLiked, setIsLiked] = useState(false);
 
@@ -133,20 +135,24 @@ export const HomeSongContainer = ({ music }) => {
             });
         }
     };
+
     //check if song is liked and if yes display it
     useEffect(() => {
+        music?.forEach((data, index) => {
+            if (user?.user?.liked_songs) {
+                const indexOfLikedSong = user.user.liked_songs.findIndex(
+                    likedSong => likedSong.songUrl.toString() === data.songUrl.toString()
+                );
+                if (indexOfLikedSong !== -1) {
 
-        if (user?.user?.liked_songs) {
-            const indexOfLikedSong = user.user.liked_songs.findIndex(
-                likedSong => likedSong._id.toString() === song._id
-            );
-            if (indexOfLikedSong !== -1) {
-                setIsLiked(true);
-            } else {
-                setIsLiked(true);
+                    setIsLiked(true);
+
+                }
+                console.log(indexOfLikedSong);
+
             }
-        }
-    }, [user, song]);
+        });
+    }, [user, music]);
     return (
         <>
             {music?.map((data, index) => (
@@ -177,16 +183,46 @@ export const HomeSongContainer = ({ music }) => {
                     </p>
                     <div className="w-full absolute bottom-2 flex items-center justify-end px-4" onClick={() => {
                         if (isLiked) {
-                            setIsLiked(false)
+                            removeFromLikedSongs(user.user._id, data._id).then((res) => {
+                                if (res) {
+                                    setIsLiked(false)
+                                } else {
+                                    setAlert(true);
+                                    setAlertMsg("Song cannot be liked");
+                                    setTimeout(() => {
+                                        setAlert(null);
+                                    }, 4000);
+
+                                }
+                            })
+
                         } else {
-                            setIsLiked(true)
+                            addToLikedSongs(user.user._id, data._id).then((res) => {
+                                if (res) {
+                                    setIsLiked(true)
+                                } else {
+                                    setAlert(true);
+                                    setAlertMsg("Song cannot be liked");
+                                    setTimeout(() => {
+                                        setAlert(null);
+                                    }, 4000);
+
+                                }
+                            })
                         }
                     }}  >
 
-                        <motion.i whileTap={{ scale: 0.75 }} >
+                        <motion.i whileTap={{ scale: 0.75 }}>
                             <IoHeart className={`w-[30px] h-[30px] text-base drop-shadow-md  ${isLiked ? 'text-red-500' : 'text-gray-400'}`} />
                         </motion.i>
                     </div>
+                    {alert && (
+                        <>
+                            <AlertError msg={alertMsg} />
+
+                        </>
+                    )}
+
 
                 </motion.div>
             ))}

@@ -144,7 +144,7 @@ export const addToLikedSongs = async (user_id, song_id) => {
 }
 export const removeFromLikedSongs = async (user_id, song_id) => {
     try {
-        const res = await axios.post(`${baseUrl}api/users/${user_id}/liked-songs/delete/${song_id}`)
+        const res = await axios.delete(`${baseUrl}api/users/${user_id}/liked-songs/delete/${song_id}`)
         return res.data
     } catch (error) {
         return error

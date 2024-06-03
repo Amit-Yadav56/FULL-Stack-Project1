@@ -124,21 +124,22 @@ export const SongCard = ({ data, index }) => {
 
   const [{ allSongs, song, isSongPlaying, user }, dispatch] = UseStateValue();
 
+
+
+
   //check if song is liked and if yes display it
-
   useEffect(() => {
-
     if (user?.user?.liked_songs) {
       const indexOfLikedSong = user.user.liked_songs.findIndex(
-        likedSong => likedSong._id.toString() === data._id
+        likedSong => likedSong.songUrl.toString() === data.songUrl.toString()
       );
       if (indexOfLikedSong !== -1) {
 
         setIsLiked(true);
+
       }
-      else {
-        setIsLiked(false)
-      }
+      console.log(indexOfLikedSong);
+
     }
 
   }, [user, data]);

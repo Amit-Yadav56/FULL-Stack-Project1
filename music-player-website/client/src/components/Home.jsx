@@ -32,10 +32,16 @@ const Home = () => {
                 dispatch({
                     type: actionType.SET_ALL_SONGS,
                     allSongs: data.data,
-                });
+                })
             });
         }
-    }, []);
+
+    }, [allSongs]);
+    useEffect(() => {
+        if (allSongs) {
+            setFilteredSongs(allSongs)
+        }
+    })
 
     useEffect(() => {
         if (searchTerm.length > 0) {
@@ -50,7 +56,7 @@ const Home = () => {
         } else {
             setFilteredSongs(null);
         }
-    }, [searchTerm]);
+    }, [searchTerm, allSongs]);
 
     useEffect(() => {
         const filtered = allSongs?.filter((data) => data.artist === artistFilter);
@@ -59,7 +65,7 @@ const Home = () => {
         } else {
             setFilteredSongs(null);
         }
-    }, [artistFilter]);
+    }, [artistFilter, allSongs]);
 
     useEffect(() => {
         const filtered = allSongs?.filter(
@@ -70,7 +76,7 @@ const Home = () => {
         } else {
             setFilteredSongs(null);
         }
-    }, [filterTerm]);
+    }, [filterTerm, allSongs]);
 
     useEffect(() => {
         const filtered = allSongs?.filter((data) => data.album === albumFilter);
@@ -80,21 +86,23 @@ const Home = () => {
             setFilteredSongs(null);
         }
     }, [albumFilter, allSongs]);
-    useEffect(() => {
-        if (albumFilter === "Favourite" && user && user.user && user.user.liked_songs) {
-            const filtered = allSongs?.filter((data) =>
-                user.user.liked_songs.some((liked) => liked.songUrl === data.songUrl)
-            );
-            if (filtered.length > 0) {
-                setFilteredSongs(filtered);
-            } else {
-                setFilteredSongs([]);
-            }
-        } else {
-            // Reset filteredSongs when albumFilter is not "Favourite"
-            setFilteredSongs(allSongs);
-        }
-    }, [albumFilter, user, allSongs]);
+    // useEffect(() => {
+    //     if (albumFilter === 'Favourite') {
+    //         const filtered = allSongs?.filter((data) =>
+    //             user.user.liked_songs.some((liked) => liked.songUrl === data.songUrl)
+
+    //         );
+    //         console.log(filtered);
+    //         if (filtered.length > 0) {
+    //             setFilteredSongs(filtered);
+    //         } else {
+    //             setFilteredSongs(null)
+    //         }
+    //     } else {
+    //         // Reset filteredSongs when albumFilter is not "Favourite"
+    //         setFilteredSongs(null);
+    //     }
+    // }, [albumFilter, user, allSongs]);
 
 
 
@@ -107,7 +115,7 @@ const Home = () => {
         } else {
             setFilteredSongs(null);
         }
-    }, [languageFilter]);
+    }, [languageFilter, allSongs]);
 
     return (
         <div className="w-full h-auto flex flex-col items-center justify-center bg-primary">
@@ -133,11 +141,37 @@ const Home = () => {
 };
 
 export const HomeSongContainer = ({ music }) => {
+    return (
+        <>
+            {music?.map((data, index) => (
+
+                <SongCard data={data} index={index} />
+            ))}
+        </>
+    );
+};
+
+export const SongCard = ({ data, index }) => {
     const [{ isSongPlaying, song, user }, dispatch] = UseStateValue();
     const [alert, setAlert] = useState(false)
     const [alertMsg, setAlertMsg] = useState(null)
-
     const [isLiked, setIsLiked] = useState(false);
+    //check if song is liked and if yes display it
+    useEffect(() => {
+        if (user?.user?.liked_songs) {
+            const indexOfLikedSong = user.user.liked_songs.findIndex(
+                likedSong => likedSong.songUrl.toString() === data.songUrl.toString()
+            );
+            if (indexOfLikedSong !== -1) {
+
+                setIsLiked(true);
+
+            }
+            console.log(indexOfLikedSong);
+
+        }
+
+    }, [user, data]);
 
     const addSongToContext = (index) => {
         if (!isSongPlaying) {
@@ -153,99 +187,76 @@ export const HomeSongContainer = ({ music }) => {
             });
         }
     };
-
-    //check if song is liked and if yes display it
-    useEffect(() => {
-        music?.forEach((data, index) => {
-            if (user?.user?.liked_songs) {
-                const indexOfLikedSong = user.user.liked_songs.findIndex(
-                    likedSong => likedSong.songUrl.toString() === data.songUrl.toString()
-                );
-                if (indexOfLikedSong !== -1) {
-
-                    setIsLiked(true);
-
-                }
-                console.log(indexOfLikedSong);
-
-            }
-        });
-    }, [user, music]);
     return (
-        <>
-            {music?.map((data, index) => (
-                <motion.div
-                    key={data._id}
-                    initial={{ opacity: 0, translateX: -50 }}
-                    animate={{ opacity: 1, translateX: 0 }}
-                    transition={{ duration: 0.3, delay: index * 0.1 }}
-                    className="relative w-40 min-w-210 px-2 py-4 cursor-pointer hover:shadow-xl hover:bg-card bg-gray-100 shadow-md rounded-lg flex flex-col items-center"
+        <motion.div
+            key={data._id}
+            initial={{ opacity: 0, translateX: -50 }}
+            animate={{ opacity: 1, translateX: 0 }}
+            transition={{ duration: 0.3, delay: index * 0.1 }}
+            className="relative w-40 min-w-210 px-2 py-4 cursor-pointer hover:shadow-xl hover:bg-card bg-gray-100 shadow-md rounded-lg flex flex-col items-center"
 
-                >
-                    <div className="w-40 min-w-[160px] h-40 min-h-[160px] rounded-lg drop-shadow-lg relative overflow-hidden">
-                        <motion.img
-                            whileHover={{ scale: 1.05 }}
-                            src={data.imageUrl}
-                            alt=""
-                            className=" w-full h-full rounded-lg object-cover"
-                            whileTap={{ scale: 0.7 }}
-                            onClick={() => addSongToContext(index)}
-                        />
-                    </div>
+        >
+            <div className="w-40 min-w-[160px] h-40 min-h-[160px] rounded-lg drop-shadow-lg relative overflow-hidden">
+                <motion.img
+                    whileHover={{ scale: 1.05 }}
+                    src={data.imageUrl}
+                    alt=""
+                    className=" w-full h-full rounded-lg object-cover"
+                    whileTap={{ scale: 0.7 }}
+                    onClick={() => addSongToContext(index)}
+                />
+            </div>
 
-                    <p className="text-base text-headingColor font-semibold my-2">
-                        {data.name.length > 25 ? `${data.name.slice(0, 25)}` : data.name}
-                        <span className="block text-sm text-gray-400 my-1">
-                            {data.artist}
-                        </span>
-                    </p>
-                    <div className="w-full absolute bottom-2 flex items-center justify-end px-4" onClick={() => {
-                        if (isLiked) {
-                            removeFromLikedSongs(user.user._id, data._id).then((res) => {
-                                if (res) {
-                                    setIsLiked(false)
-                                } else {
-                                    setAlert(true);
-                                    setAlertMsg("Song cannot be liked");
-                                    setTimeout(() => {
-                                        setAlert(null);
-                                    }, 4000);
-
-                                }
-                            })
-
+            <p className="text-base text-headingColor font-semibold my-2">
+                {data.name.length > 25 ? `${data.name.slice(0, 25)}` : data.name}
+                <span className="block text-sm text-gray-400 my-1">
+                    {data.artist}
+                </span>
+            </p>
+            <div className="w-full absolute bottom-2 flex items-center justify-end px-4" onClick={() => {
+                if (isLiked) {
+                    removeFromLikedSongs(user.user._id, data._id).then((res) => {
+                        if (res) {
+                            setIsLiked(false)
                         } else {
-                            addToLikedSongs(user.user._id, data._id).then((res) => {
-                                if (res) {
-                                    setIsLiked(true)
-                                } else {
-                                    setAlert(true);
-                                    setAlertMsg("Song cannot be liked");
-                                    setTimeout(() => {
-                                        setAlert(null);
-                                    }, 4000);
+                            setAlert(true);
+                            setAlertMsg("Song cannot be liked");
+                            setTimeout(() => {
+                                setAlert(null);
+                            }, 4000);
 
-                                }
-                            })
                         }
-                    }}  >
+                    })
 
-                        <motion.i whileTap={{ scale: 0.75 }}>
-                            <IoHeart className={`w-[30px] h-[30px] text-base drop-shadow-md  ${isLiked ? 'text-red-500' : 'text-gray-400'}`} />
-                        </motion.i>
-                    </div>
-                    {alert && (
-                        <>
-                            <AlertError msg={alertMsg} />
+                } else {
+                    addToLikedSongs(user.user._id, data._id).then((res) => {
+                        if (res) {
+                            setIsLiked(true)
+                        } else {
+                            setAlert(true);
+                            setAlertMsg("Song cannot be liked");
+                            setTimeout(() => {
+                                setAlert(null);
+                            }, 4000);
 
-                        </>
-                    )}
+                        }
+                    })
+                }
+            }}  >
+
+                <motion.i whileTap={{ scale: 0.75 }}>
+                    <IoHeart className={`w-[30px] h-[30px] text-base drop-shadow-md  ${isLiked ? 'text-red-500' : 'text-gray-400'}`} />
+                </motion.i>
+            </div>
+            {alert && (
+                <>
+                    <AlertError msg={alertMsg} />
+
+                </>
+            )}
 
 
-                </motion.div>
-            ))}
-        </>
-    );
-};
-
+        </motion.div>
+    )
+}
 export default Home;

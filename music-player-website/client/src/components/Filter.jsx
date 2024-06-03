@@ -8,7 +8,7 @@ import { MdClearAll } from "react-icons/md";
 import { motion } from "framer-motion";
 
 const Filter = ({ setFilteredSongs }) => {
-  const [{ filterTerm, allArtists, allAlbums }, dispatch] = UseStateValue();
+  const [{ filterTerm, allArtists, allAlbums, allSongs }, dispatch] = UseStateValue();
 
   useEffect(() => {
     if (!allArtists) {
@@ -32,14 +32,14 @@ const Filter = ({ setFilteredSongs }) => {
   };
 
   const clearAllFilter = () => {
-    setFilteredSongs(null);
+    setFilteredSongs(allSongs);
     dispatch({ type: actionType.SET_ARTIST_FILTER, artistFilter: null });
     dispatch({ type: actionType.SET_LANGUAGE_FILTER, languageFilter: null });
     dispatch({ type: actionType.SET_ALBUM_FILTER, albumFilter: null });
     dispatch({ type: actionType.SET_FILTER_TERM, filterTerm: null });
   };
   return (
-    <div className="w-full my-4 px-6 py-4 flex items-center justify-start md:justify-center gap-10">
+    <div className="w-full my-4 px-6 py-4 flex items-center justify-center flex-wrap  gap-10">
       <FilterButtons filterData={allArtists} flag={"Artist"} />
 
       <div className=" flex items-center gap-6 mx-4">

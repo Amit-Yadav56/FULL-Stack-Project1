@@ -12,6 +12,7 @@ const Home = () => {
     const [
         {
             searchTerm,
+            user,
             isSongPlaying,
             song,
             allSongs,
@@ -78,7 +79,24 @@ const Home = () => {
         } else {
             setFilteredSongs(null);
         }
-    }, [albumFilter]);
+    }, [albumFilter, allSongs]);
+    useEffect(() => {
+        if (albumFilter === "Favourite" && user && user.user && user.user.liked_songs) {
+            const filtered = allSongs?.filter((data) =>
+                user.user.liked_songs.some((liked) => liked.songUrl === data.songUrl)
+            );
+            if (filtered.length > 0) {
+                setFilteredSongs(filtered);
+            } else {
+                setFilteredSongs([]);
+            }
+        } else {
+            // Reset filteredSongs when albumFilter is not "Favourite"
+            setFilteredSongs(allSongs);
+        }
+    }, [albumFilter, user, allSongs]);
+
+
 
     useEffect(() => {
         const filtered = allSongs?.filter(

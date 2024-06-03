@@ -24,7 +24,7 @@ const Home = () => {
         dispatch,
     ] = UseStateValue();
 
-    const [filteredSongs, setFilteredSongs] = useState(null);
+    const [filteredSongs, setFilteredSongs] = useState(false);
 
     useEffect(() => {
         if (!allSongs) {
@@ -35,13 +35,12 @@ const Home = () => {
                 })
             });
         }
-
-    }, [allSongs]);
-    useEffect(() => {
-        if (allSongs) {
+        else {
             setFilteredSongs(allSongs)
         }
-    })
+
+    }, [allSongs]);
+
 
     useEffect(() => {
         if (searchTerm.length > 0) {
@@ -86,23 +85,23 @@ const Home = () => {
             setFilteredSongs(null);
         }
     }, [albumFilter, allSongs]);
-    // useEffect(() => {
-    //     if (albumFilter === 'Favourite') {
-    //         const filtered = allSongs?.filter((data) =>
-    //             user.user.liked_songs.some((liked) => liked.songUrl === data.songUrl)
+    useEffect(() => {
+        if (albumFilter === 'Favourite') {
+            const filtered = allSongs?.filter((data) =>
+                user.user.liked_songs.some((liked) => liked.songUrl === data.songUrl)
 
-    //         );
-    //         console.log(filtered);
-    //         if (filtered.length > 0) {
-    //             setFilteredSongs(filtered);
-    //         } else {
-    //             setFilteredSongs(null)
-    //         }
-    //     } else {
-    //         // Reset filteredSongs when albumFilter is not "Favourite"
-    //         setFilteredSongs(null);
-    //     }
-    // }, [albumFilter, user, allSongs]);
+            );
+            console.log(filtered);
+            if (filtered.length > 0) {
+                setFilteredSongs(filtered);
+            } else {
+                setFilteredSongs(null)
+            }
+        } else {
+            // Reset filteredSongs when albumFilter is not "Favourite"
+            setFilteredSongs(null);
+        }
+    }, [albumFilter, user, allSongs]);
 
 
 

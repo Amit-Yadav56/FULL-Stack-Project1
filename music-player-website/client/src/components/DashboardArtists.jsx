@@ -133,12 +133,12 @@ export const ArtistCard = ({ data, index }) => {
 
       <p className="text-base text-textColor">{data.name}</p>
       <div className="flex items-center gap-4">
-        <a href={data.instagram} target="_blank">
+        <a href={`https://www.instagram.com/${data.instagram}`} target="_blank">
           <motion.i whileTap={{ scale: 0.75 }}>
             <IoLogoInstagram className="text-gray-500 hover:text-headingColor text-xl" />
           </motion.i>
         </a>
-        <a href={data.twitter} target="_blank">
+        <a href={`https://www.twitter.com/${data.twitter}`} target="_blank">
           <motion.i whileTap={{ scale: 0.75 }}>
             <IoLogoTwitter className="text-gray-500 hover:text-headingColor text-xl" />
           </motion.i>

@@ -15,6 +15,7 @@ export const actionType = {
     SET_MINI_PLAYER: "SET_MINI_PLAYER",
     SET_SONG: "SET_SONG",
     SET_SEARCH_TERM: "SET_SEARCH_TERM",
+    SET_FILTERED_SONG: "SET_FILTERED_SONG",
 }
 
 const reducer = (state, action) => {
@@ -95,6 +96,11 @@ const reducer = (state, action) => {
             return {
                 ...state,
                 searchTerm: action.searchTerm,
+            };
+        case actionType.SET_FILTERED_SONG:
+            return {
+                ...state,
+                filteredSongs: action.filteredSongs,
             };
 
 

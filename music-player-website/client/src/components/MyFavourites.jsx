@@ -2,9 +2,11 @@ import React from 'react'
 import { HomeSongContainer } from './Home'
 import { SongCard } from './DashboardSongs'
 import { UseStateValue } from '../context/StateProvider'
+import { actionType } from "../context/reducer";
 import { useEffect, useState } from 'react'
 import Header from './Header'
 import SearchBar from './SearchBar'
+
 
 const MyFavourites = () => {
   const [filteredSongs, setFilteredSongs] = useState(null);
@@ -28,8 +30,16 @@ const MyFavourites = () => {
           data.artist.includes(artistFilter)
       );
       setFilteredSongs(filtered);
+      dispatch({
+        type: actionType.SET_FILTERED_SONG,
+        filteredSongs: filtered,
+      });
     } else {
       setFilteredSongs(filteredSongs);
+      dispatch({
+        type: actionType.SET_FILTERED_SONG,
+        filteredSongs: filteredSongs,
+      });
     }
   }, [searchTerm, filteredSongs]);
 
@@ -42,8 +52,16 @@ const MyFavourites = () => {
     console.log(filteredSongs);
     if (filteredSongs.length > 0) {
       setFilteredSongs(filteredSongs);
+      dispatch({
+        type: actionType.SET_FILTERED_SONG,
+        filteredSongs: filteredSongs,
+      });
     } else {
       setFilteredSongs(null)
+      dispatch({
+        type: actionType.SET_FILTERED_SONG,
+        filteredSongs: allSongs,
+      });
     }
 
   }, [albumFilter, user, allSongs]);

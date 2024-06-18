@@ -13,5 +13,6 @@ export const initialState = {
     filterTerm: null,
     searchTerm: "",
     miniPlayer: false,
-    likedSongs: null
+    likedSongs: null,
+    filteredSongs: null
 }

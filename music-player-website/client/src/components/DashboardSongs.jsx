@@ -28,8 +28,17 @@ const DashboardSongs = () => {
           data.name.toLowerCase().includes(songFilter)
       );
       setFilteredSongs(filtered);
+      dispatch({
+        type: actionType.SET_FILTERED_SONG,
+        filteredSongs: filtered,
+      });
+
     } else {
       setFilteredSongs(null);
+      dispatch({
+        type: actionType.SET_FILTERED_SONG,
+        filteredSongs: allSongs,
+      });
     }
   }, [songFilter]);
 
@@ -78,6 +87,10 @@ const DashboardSongs = () => {
             onClick={() => {
               setSongFilter("");
               setFilteredSongs(null);
+              dispatch({
+                type: actionType.SET_FILTERED_SONG,
+                filteredSongs: allSongs,
+              });
             }}
           >
             <AiOutlineClear className="text-3xl text-textColor cursor-pointer" />

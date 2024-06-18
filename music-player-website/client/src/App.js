@@ -18,7 +18,7 @@ const App = () => {
   const firebaseAuth = getAuth(app);
   const navigate = useNavigate();
   //someting wrong here
-  const [{ user, allSongs, song, isSongPlaying, miniPlayer }, dispatch] = UseStateValue();
+  const [{ user, allSongs, song, isSongPlaying, miniPlayer, filteredSongs }, dispatch] = UseStateValue();
 
 
   //create a state to save the authentication is true or not
@@ -93,6 +93,7 @@ const App = () => {
             className={`fixed min-w-[700px] h-26  inset-x-0 bottom-0  bg-cardOverlay drop-shadow-2xl backdrop-blur-md flex items-center justify-center`}
           >
             <MusicPlayer />
+
           </motion.div>
         )}
       </div>

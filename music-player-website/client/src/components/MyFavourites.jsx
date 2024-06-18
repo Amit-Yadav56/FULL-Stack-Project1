@@ -21,27 +21,40 @@ const MyFavourites = () => {
     dispatch,
   ] = UseStateValue();
   useEffect(() => {
-    if (searchTerm.length > 0) {
-      const filtered = filteredSongs.filter(
-        (data) =>
-          data.artist.toLowerCase().includes(searchTerm) ||
-          data.language.toLowerCase().includes(searchTerm) ||
-          data.name.toLowerCase().includes(searchTerm) ||
-          data.artist.includes(artistFilter)
+    let songs = filteredSongs || [];
+    if (searchTerm) {
+      songs = songs.filter((data) =>
+        data.artist.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        data.language.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        data.name.toLowerCase().includes(searchTerm.toLowerCase())
       );
-      setFilteredSongs(filtered);
+      setFilteredSongs(songs);
       dispatch({
         type: actionType.SET_FILTERED_SONG,
-        filteredSongs: filtered,
-      });
-    } else {
-      setFilteredSongs(filteredSongs);
-      dispatch({
-        type: actionType.SET_FILTERED_SONG,
-        filteredSongs: filteredSongs,
+        filteredSongs: songs,
       });
     }
-  }, [searchTerm, filteredSongs]);
+    else {
+      const filteredSongs = allSongs?.filter((data) =>
+        user.user.liked_songs.some((liked) => liked.songUrl === data.songUrl)
+
+      );
+      console.log(filteredSongs);
+      if (filteredSongs.length > 0) {
+        setFilteredSongs(filteredSongs);
+        dispatch({
+          type: actionType.SET_FILTERED_SONG,
+          filteredSongs: filteredSongs,
+        });
+      } else {
+        setFilteredSongs(null)
+        dispatch({
+          type: actionType.SET_FILTERED_SONG,
+          filteredSongs: filteredSongs,
+        });
+      }
+    }
+  }, [searchTerm, filteredSongs, albumFilter, user, allSongs]);
 
   useEffect(() => {
 
@@ -60,7 +73,7 @@ const MyFavourites = () => {
       setFilteredSongs(null)
       dispatch({
         type: actionType.SET_FILTERED_SONG,
-        filteredSongs: allSongs,
+        filteredSongs: filteredSongs,
       });
     }
 
